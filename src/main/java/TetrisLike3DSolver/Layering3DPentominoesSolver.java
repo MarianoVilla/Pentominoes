@@ -97,6 +97,7 @@ public class Layering3DPentominoesSolver {
 			}
 		}
 		return possibleGlobalSolutions.get(highestValueSolutionIndex);
+		
 	}
 
 	/**
