@@ -13,7 +13,7 @@ public class PackingService {
 		containers.parallelStream().forEach((container) ->
 		{ 
 			ContainerPackingResult containerPackingResult = new ContainerPackingResult();
-			containerPackingResult.setContainerID(container.getId());
+			containerPackingResult.setContainer(container);
 			algorithmTypeIDs.parallelStream().forEach((algorithmTypeID) -> 
 			{
 				PackingAlgorithm algorithm;

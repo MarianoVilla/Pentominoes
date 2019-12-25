@@ -18,5 +18,8 @@ public class LayeredContainer extends Container {
 	public double getValue() {
 		return this.layers.stream().mapToDouble(x -> x.getValue()).sum();
 	}
+	public int getPackedItemsCount() {
+		return this.layers.stream().mapToInt(x -> x.getItemsCount()).sum();
+	}
 	
 }

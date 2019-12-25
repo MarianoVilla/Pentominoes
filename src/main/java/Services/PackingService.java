@@ -20,7 +20,7 @@ public class PackingService {
 	public static ContainerPackingResult Pack(Container container, List<Item> itemsToPack) {
 
 		ContainerPackingResult containerPackingResult = new ContainerPackingResult();
-		containerPackingResult.setContainerID(container.getId());
+		containerPackingResult.setContainer(container);
 
 		PackingAlgorithm algorithm = new EB_AFIT();
 
@@ -59,7 +59,7 @@ public class PackingService {
 
 		containers.parallelStream().forEach((container) -> {
 			ContainerPackingResult containerPackingResult = new ContainerPackingResult();
-			containerPackingResult.setContainerID(container.getId());
+			containerPackingResult.setContainer(container);
 			algorithmTypeIDs.parallelStream().forEach((algorithmTypeID) -> {
 				PackingAlgorithm algorithm;
 				try {
@@ -126,61 +126,6 @@ public class PackingService {
 		}
 		return PackingResults;
 	}
-	/*	*//**
-			 * The limit until we consider a solution be computed by brute force.
-			 */
-	/*
-	 * static int permutableSizeLimit = 6;
-	 *//**
-		 * Up to a rather small limit, brute forcing the best value is possible. After
-		 * that, we'll need other techniques to maximize value.
-		 * 
-		 * @return Weather the given amount is smaller than the configured value
-		 *         (permutableSizeLimit).
-		 */
-	/*
-	 * private static boolean isPermutableSize(int amount) { return amount <=
-	 * permutableSizeLimit; }
-	 * 
-	 * 
-	 * public static <T extends Container> ContainerPackingResult
-	 * PackMaximizingValue(List<Item> itemsToPack, T containerInstance) { if
-	 * (isPermutableSize(itemsToPack.size())) { return PackBruteForce(itemsToPack,
-	 * containerInstance); } itemsToPack.sort((i1, i2) ->
-	 * Double.compare(i2.getValue(), i1.getValue())); return
-	 * Pack(Arrays.asList(containerInstance.clone()), itemsToPack,
-	 * Arrays.asList(1)).get(0); }
-	 * 
-	 * 
-	 * private static <T extends Container> ContainerPackingResult
-	 * PackBruteForce(List<Item> itemsToPack, T containerInstance) {
-	 * List<List<Item>> permutations = ListUtils.recursivePermutations(itemsToPack);
-	 * 
-	 * List<ArrayList<ContainerPackingResult>> possibleSolutions = new
-	 * ArrayList<ArrayList<ContainerPackingResult>>();
-	 * 
-	 * for(List<Item> perm : permutations) {
-	 * possibleSolutions.add(Pack(Arrays.asList(containerInstance.clone()), perm,
-	 * Arrays.asList(1))); }
-	 * 
-	 * return getHighestValueSolution(possibleSolutions); }
-	 *//**
-		 * Used by PackBruteForce to get the solution with the highest value of all.
-		 * 
-		 * @param possibleSolutions
-		 * @return
-		 *//*
-			 * private static ContainerPackingResult
-			 * getHighestValueSolution(List<ArrayList<ContainerPackingResult>>
-			 * possibleSolutions) { double highestValue = -1; int highestValueIndex = -1;
-			 * for(int i = 0; i < possibleSolutions.size(); i++) { double thisSolutionsValue
-			 * =
-			 * possibleSolutions.get(i).get(0).getAlgorithmPackingResults().get(0).getValue(
-			 * ); if(highestValue < thisSolutionsValue) { highestValue = thisSolutionsValue;
-			 * highestValueIndex = i; } } return
-			 * possibleSolutions.get(highestValueIndex).get(0); }
-			 */
-
 	/**
 	 * Gets the packing algorithm from the specified algorithm type ID.
 	 * 
