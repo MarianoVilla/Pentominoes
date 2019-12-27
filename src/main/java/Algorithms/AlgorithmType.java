@@ -1,7 +1,6 @@
 package Algorithms;
 
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.function.Supplier;
 /**
  * Stores every box packing algorithm implementation.

@@ -6,6 +6,7 @@ import java.util.Map;
 /**
  * Abstraction for the pentomino entity. 
  */
+@SuppressWarnings("serial")
 public abstract class Pentomino {
 	int id;
 	double height;

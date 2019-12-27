@@ -3,7 +3,6 @@ package Solver3DTests;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.junit.Test;
 
@@ -22,6 +21,7 @@ import TestHelpers.TestRepo;
  * Unit tests for the BoxPackingService.
  *
  */
+@SuppressWarnings("serial")
 public class BoxPackingServiceTests {
 	
 	@Test

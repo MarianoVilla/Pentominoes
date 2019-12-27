@@ -45,6 +45,7 @@ public class TestRepo {
 		}
 		return items;
 	}
+	@SuppressWarnings("serial")
 	public static ArrayList<Item> getThreeStandardItems(){
 		return new ArrayList<Item>() {{
 			add(new ClassAItem(1, 1, 1));

@@ -112,7 +112,7 @@ public class Layering3DPentominoesSolver {
 	/**
 	 * Given a list of pentominoes, this method will create a list of layers containing them.
 	 * The layers can then be put into LayeredContainers.
-	 * This isn't a general solution: we assume the layers' hegith to be 0.5 and hence there are some hardcoded bits.
+	 * This isn't a general solution: we assume the layers' height to be 0.5 and hence there are some hardcoded bits.
 	 * @param Pentominoes
 	 * @return
 	 */

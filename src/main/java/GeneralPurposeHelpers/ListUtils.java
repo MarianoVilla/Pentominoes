@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import TetrisLike3DSolver.Pentomino;
 /**
  * General purpose List helper class. To abstract logic used in several places.
  *

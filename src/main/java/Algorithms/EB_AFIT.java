@@ -47,10 +47,12 @@ public class EB_AFIT implements PackingAlgorithm{
 	private ArrayList<Item> itemsToPack;
 	private ArrayList<Item> itemsPackedInOrder;
 	private ArrayList<Layer> layers;
+	@SuppressWarnings("unused")
 	private ContainerPackingResult result;
 
 	private ScrapPad scrapfirst;
 	private ScrapPad smallestZ;
+	@SuppressWarnings("unused")
 	private ScrapPad trash;
 
 	private Boolean evened;
@@ -1178,6 +1180,7 @@ public class EB_AFIT implements PackingAlgorithm{
 		/**
 		 * (Addendum.) The layer value. 
 		 */
+		@SuppressWarnings("unused")
 		public double LayerValue;
 
 		/**

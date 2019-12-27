@@ -1,6 +1,4 @@
 
-
-
 /**
  * Main entry point, used solely for quick tests.
  * TODO: delete.

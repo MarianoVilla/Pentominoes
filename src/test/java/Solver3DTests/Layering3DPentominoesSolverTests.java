@@ -13,6 +13,7 @@ import TetrisLike3DSolver.*;
  * Unit tests for the Layering3DPentominoesSolver.
  *
  */
+@SuppressWarnings("serial")
 public class Layering3DPentominoesSolverTests {
 	
 	@Test

@@ -1,12 +1,10 @@
 package Services;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import Algorithms.*;
 import Entities.*;
-import GeneralPurposeHelpers.ListUtils;
 
 /**
  * Takes care of the box packing logic.
@@ -20,6 +18,7 @@ public class BoxPackingService {
 	 * @param itemsToPack
 	 * @return
 	 */
+	@SuppressWarnings("serial")
 	public static ContainerPackingResult pack(Container container, List<Item> itemsToPack) {
 
 		ContainerPackingResult containerPackingResult = new ContainerPackingResult();
