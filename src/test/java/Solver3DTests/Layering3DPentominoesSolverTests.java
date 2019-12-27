@@ -9,9 +9,11 @@ import org.junit.Test;
 import TestHelpers.TestRepo;
 import TetrisLike3DSolver.*;
 
+/**
+ * Unit tests for the Layering3DPentominoesSolver.
+ *
+ */
 public class Layering3DPentominoesSolverTests {
-
-
 	
 	@Test
 	public void testPackAll_ShouldReturnOneContainerWithTwoLayers() {
@@ -22,7 +24,6 @@ public class Layering3DPentominoesSolverTests {
 		assertEquals(2, Solutions.get(0).getLayers().size());
 		
 	}
-	//TODO: add tests for the DefaultContainers' size.
 	@Test
 	public void testPackAll_ShouldFitInOneLayer() {
 		ArrayList<Pentomino> Pentominoes = TestRepo.getPentos(3, 'L');
@@ -66,6 +67,15 @@ public class Layering3DPentominoesSolverTests {
 		assertEquals(3, Solution.getPackedItemsCount());
 	}
 	@Test
+	public void testPackInDefaultContainer_ShouldFitAll() {
+		ArrayList<Pentomino> Pentominoes = TestRepo.getPentos(25, 'L');
+		Layering3DPentominoesSolver Solver3D = new Layering3DPentominoesSolver(2.5,4,16);
+		
+		LayeredContainer Solution = Solver3D.Pack(Pentominoes);
+		
+		assertEquals(25, Solution.getPackedItemsCount());
+	}
+	@Test
 	public void testPack_ShouldFitTheHighestValueOne() {
 		ArrayList<Pentomino> Pentominoes = new ArrayList<Pentomino>() 
 		{{  
@@ -74,7 +84,7 @@ public class Layering3DPentominoesSolverTests {
 			addAll(TestRepo.getPentos(1, 'L', 1)); 
 		}}; 
 		
-		Layering3DPentominoesSolver Solver3D = new Layering3DPentominoesSolver(2,1.5,1.5);
+		Layering3DPentominoesSolver Solver3D = new Layering3DPentominoesSolver(1.5,0.5,2);
 		
 		LayeredContainer Solution = Solver3D.Pack(Pentominoes);
 		

@@ -1,7 +1,11 @@
 package TetrisLike3DSolver;
 
-import TetrisLike2DSolver.Pentominos2DSolverMT.Solution;
+import TetrisLike2DSolver.Pentominoes2DSolverMT.Solution;
 
+/**
+ * A solution layer stores a 2D solution for pentominoes stacking, plus a height for the addition dimension.
+ *
+ */
 public class SolutionLayer {
 	
 	private double height;

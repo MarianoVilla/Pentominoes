@@ -2,6 +2,10 @@ package Entities;
 
 import java.util.ArrayList;
 
+/**
+ * Representation of the result of a packing algorithm.
+ *
+ */
 public class AlgorithmPackingResult {
 
 	private int algorithmID;
@@ -13,13 +17,12 @@ public class AlgorithmPackingResult {
 	private double percentItemVolumePacked;
 	private ArrayList<Item> unpackedItems;
 	private double value;
-	private int packedItemsCount;
 	
 
 
-	//TODO: optimize. It's a fire and forget prop.
+
 	public int getPackedItemsCount() {
-		return packedItems.size();
+		return this.packedItems.size();
 	}
 
 	public AlgorithmPackingResult()
@@ -36,8 +39,6 @@ public class AlgorithmPackingResult {
 	public void setValue(double value) {
 		this.value = value;
 	}
-
-	
 
 	public int getAlgorithmID() {
 		return algorithmID;

@@ -5,13 +5,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import Entities.ClassAContainer;
-import Entities.ClassBContainer;
-import Entities.ClassCContainer;
+import Entities.ClassAItem;
+import Entities.ClassBItem;
+import Entities.ClassCItem;
 import Entities.Item;
 import Services.ItemsFactory;
 import TetrisLike3DSolver.*;
 
+/**
+ * A repository to make tests cleaner.
+ *
+ */
 public class TestRepo {
 	
 	public static ArrayList<Pentomino> getPentos(int howMany, Character typeChar){
@@ -43,13 +47,13 @@ public class TestRepo {
 	}
 	public static ArrayList<Item> getThreeStandardItems(){
 		return new ArrayList<Item>() {{
-			add(new ClassAContainer(1, 1, 1));
-			add(new ClassBContainer(1, 1, 3));
-			add(new ClassCContainer(1, 1, 2));
+			add(new ClassAItem(1, 1, 1));
+			add(new ClassBItem(1, 1, 3));
+			add(new ClassCItem(1, 1, 2));
 		}};
 	}
 	private static String getRandomItemClass() {
-		List<String> classNames = Arrays.asList(ClassAContainer.class.getName(), ClassBContainer.class.getName(), ClassCContainer.class.getName());
+		List<String> classNames = Arrays.asList(new ClassAItem(0,0,0).toString(), new ClassBItem(0,0,0).toString(), new ClassCItem(0,0,0).toString());
 		return classNames.get(new Random().nextInt(3));
 	}
 	private static Character getRandomPentoChar() {

@@ -2,6 +2,9 @@ package TetrisLike3DSolver;
 
 import java.awt.Color;
 
+/**
+ * NullPentomino extending the abstract Pentomino. Used for special case handling, see: https://www.martinfowler.com/eaaCatalog/specialCase.html 
+ */
 public class NullPentomino extends Pentomino {
 
 	public NullPentomino(int id, double height, double value) {

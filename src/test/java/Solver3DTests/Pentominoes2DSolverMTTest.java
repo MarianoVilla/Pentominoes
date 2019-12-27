@@ -6,17 +6,21 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import TestHelpers.TestRepo;
-import TetrisLike2DSolver.Pentominos2DSolverMT;
-import TetrisLike2DSolver.Pentominos2DSolverMT.Solution;
+import TetrisLike2DSolver.Pentominoes2DSolverMT;
+import TetrisLike2DSolver.Pentominoes2DSolverMT.Solution;
 import TetrisLike3DSolver.Pentomino;
 
-public class Pentominos2DSolverMTTest {
+/**
+ * Unit tests for the Pentominoes2DSolverMT.
+ *
+ */
+public class Pentominoes2DSolverMTTest {
 	
 	@Test
 	public void testEarlyReturn() {
 		ArrayList<Pentomino> pentos = TestRepo.getRandomPentos(1);
 		
-		Pentominos2DSolverMT Solver = new Pentominos2DSolverMT(1, 1, pentos);
+		Pentominoes2DSolverMT Solver = new Pentominoes2DSolverMT(1, 1, pentos);
 		Solution Sol = Solver.solve();
 		
 		assertTrue(Solver.isSolved());
@@ -28,7 +32,7 @@ public class Pentominos2DSolverMTTest {
 		int amount = 12;
 		ArrayList<Pentomino> pentos = TestRepo.getRandomPentos(amount);
 		
-		Pentominos2DSolverMT Solver = new Pentominos2DSolverMT(8, 8, pentos);
+		Pentominoes2DSolverMT Solver = new Pentominoes2DSolverMT(8, 8, pentos);
 		Solution Sol = Solver.solve();
 		
 		assertTrue(Solver.isSolved());
@@ -41,7 +45,7 @@ public class Pentominos2DSolverMTTest {
 	public void testSolve_LPentoInput_ShouldFitAll() {
 		ArrayList<Pentomino> pentos = TestRepo.getPentos(1,'L');
 		
-		Pentominos2DSolverMT Solver = new Pentominos2DSolverMT(2, 4, pentos);
+		Pentominoes2DSolverMT Solver = new Pentominoes2DSolverMT(2, 4, pentos);
 		Solution Sol = Solver.solve();
 		
 		assertTrue(Solver.isSolved());
@@ -49,13 +53,13 @@ public class Pentominos2DSolverMTTest {
 		
 		pentos = TestRepo.getPentos(2, 'L');
 		
-		Solver = new Pentominos2DSolverMT(2, 5, pentos);
+		Solver = new Pentominoes2DSolverMT(2, 5, pentos);
 		Sol = Solver.solve();
 		
 		assertTrue(Solver.isSolved());
 		assertEquals(2, Sol.getPentominoes().size());
 		
-		Solver = new Pentominos2DSolverMT(5, 2, pentos);
+		Solver = new Pentominoes2DSolverMT(5, 2, pentos);
 		Sol = Solver.solve();
 		
 		assertTrue(Solver.isSolved());
@@ -66,7 +70,7 @@ public class Pentominos2DSolverMTTest {
 	public void testSolve_TPentoInput_ShouldFitAll() {
 		ArrayList<Pentomino> pentos = TestRepo.getPentos(1,'T');
 		
-		Pentominos2DSolverMT Solver = new Pentominos2DSolverMT(3, 3, pentos);
+		Pentominoes2DSolverMT Solver = new Pentominoes2DSolverMT(3, 3, pentos);
 		Solution Sol = Solver.solve();
 		
 		assertTrue(Solver.isSolved());
@@ -74,7 +78,7 @@ public class Pentominos2DSolverMTTest {
 		
 		pentos = TestRepo.getPentos(2, 'T');
 
-		Solver = new Pentominos2DSolverMT(4, 4, pentos);
+		Solver = new Pentominoes2DSolverMT(4, 4, pentos);
 		Sol = Solver.solve();
 		
 		assertTrue(Solver.isSolved());
@@ -82,7 +86,7 @@ public class Pentominos2DSolverMTTest {
 		
 		pentos = TestRepo.getPentos(3, 'T');
 
-		Solver = new Pentominos2DSolverMT(5, 5, pentos);
+		Solver = new Pentominoes2DSolverMT(5, 5, pentos);
 		Sol = Solver.solve();
 		
 		assertTrue(Solver.isSolved());
@@ -93,7 +97,7 @@ public class Pentominos2DSolverMTTest {
 	public void testSolve_PPento_ShouldFitAll() {
 		ArrayList<Pentomino> pentos = TestRepo.getPentos(1,'P');
 		
-		Pentominos2DSolverMT Solver = new Pentominos2DSolverMT(2, 4, pentos);
+		Pentominoes2DSolverMT Solver = new Pentominoes2DSolverMT(2, 4, pentos);
 		Solution Sol = Solver.solve();
 		
 		assertTrue(Solver.isSolved());
@@ -101,13 +105,13 @@ public class Pentominos2DSolverMTTest {
 		
 		pentos = TestRepo.getPentos(2, 'P');
 		
-		Solver = new Pentominos2DSolverMT(2, 5, pentos);
+		Solver = new Pentominoes2DSolverMT(2, 5, pentos);
 		Sol = Solver.solve();
 		
 		assertTrue(Solver.isSolved());
 		assertEquals(2, Sol.getPentominoes().size());
 		
-		Solver = new Pentominos2DSolverMT(5, 2, pentos);
+		Solver = new Pentominoes2DSolverMT(5, 2, pentos);
 		Sol = Solver.solve();
 		
 		assertTrue(Solver.isSolved());

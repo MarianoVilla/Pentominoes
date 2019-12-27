@@ -1,5 +1,8 @@
-package TetrisLike3DSolver;
+package GeneralPurposeHelpers;
 
+/**
+ * A general matrices helper. Hasn't being used so far, 'cause it was made thinking in the Pentominos2DSolverMT refactoring that are yet to be made.
+ */
 public class MatrixHelper {
 	
     public static void rotateMatrix(int[][] matrix) {

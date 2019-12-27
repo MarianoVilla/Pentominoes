@@ -1,7 +1,9 @@
 package TetrisLike3DSolver;
 
 import java.awt.Color;
-
+/**
+ * An PPentomino extending the abstract Pentomino.
+ */
 public class PPentomino extends Pentomino {
 	
 	private int[][] representation = 

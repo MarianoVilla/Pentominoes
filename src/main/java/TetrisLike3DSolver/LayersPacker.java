@@ -3,6 +3,10 @@ package TetrisLike3DSolver;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Takes care of the layers packing.
+ *
+ */
 public class LayersPacker {
 	private double containerWidth;
 	private double containerHeight;

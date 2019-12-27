@@ -10,14 +10,14 @@ public class Container {
 	private double volume;
 	private double value;
 
-
-	/// <summary>
-	/// Initializes a new instance of the Container class.
-	/// </summary>
-	/// <param name="id">The container ID.</param>
-	/// <param name="length">The container length.</param>
-	/// <param name="width">The container width.</param>
-	/// <param name="height">The container height.</param>
+	
+	/**
+	 * Initializes a new instance of the Container class.
+	 * @param id The container ID. Only for semantic purposes.
+	 * @param length The container length.
+	 * @param width The container width.
+	 * @param height The container height.
+	 */
 	public Container(int id, double length, double width, double height)
 	{
 		this.setId(id);

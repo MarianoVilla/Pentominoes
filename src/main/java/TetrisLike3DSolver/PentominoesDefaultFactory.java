@@ -2,6 +2,10 @@ package TetrisLike3DSolver;
 
 import java.util.ArrayList;
 
+/**
+ * A relaxed implementation of a factory for pentominoes. See: https://en.wikipedia.org/wiki/Factory_method_pattern 
+ *
+ */
 public class PentominoesDefaultFactory {
 	
 	public static ArrayList<Pentomino> CreateMany(int howMany, char typeChar){

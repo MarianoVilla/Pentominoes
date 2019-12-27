@@ -2,9 +2,9 @@ package Services;
 import java.util.ArrayList;
 import java.util.List;
 
-import Entities.ClassAContainer;
-import Entities.ClassBContainer;
-import Entities.ClassCContainer;
+import Entities.ClassAItem;
+import Entities.ClassBItem;
+import Entities.ClassCItem;
 import Entities.Item;
 
 /**
@@ -23,9 +23,9 @@ public class ItemsFactory {
 	 */
 	public static Item Create(String itemClassName, int quantity, double value, int id) {
 		switch(itemClassName) {
-		case "Entities.ClassAContainer": return new ClassAContainer(id, quantity, value);
-		case "Entities.ClassBContainer": return new ClassBContainer(id, quantity, value);
-		case "Entities.ClassCContainer": return new ClassCContainer(id, quantity, value);
+		case "Class A": return new ClassAItem(id, quantity, value);
+		case "Class B": return new ClassBItem(id, quantity, value);
+		case "Class C": return new ClassCItem(id, quantity, value);
 		default: throw new IllegalArgumentException("No known item.");
 		}
 	}
