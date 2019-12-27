@@ -4,6 +4,10 @@ import javafx.scene.Group;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
 
+/**
+ * A group that handles transforms for its' children.
+ *
+ */
 class SmartGroup extends Group {
     Rotate r;
     Transform t = new Rotate();

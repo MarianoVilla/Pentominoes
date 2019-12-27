@@ -8,7 +8,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.util.Callback;
-
+/**
+ * Extension of a TableCell that allows a button to be placed instead of a primitive.
+ *
+ */
 public class ActionButtonTableCell<S> extends TableCell<S, Button> {
 
     private final Button actionButton;

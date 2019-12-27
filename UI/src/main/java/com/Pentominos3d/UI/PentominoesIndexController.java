@@ -1,190 +1,149 @@
 package com.Pentominos3d.UI;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import Entities.*;
-import Services.ItemsFactory;
-import Services.PackingService;
+import TetrisLike3DSolver.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TableView;
 import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Modality;
+import javafx.scene.control.TableColumn;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 public class PentominoesIndexController implements Initializable {
-	
-	private static final Logger log = LoggerFactory.getLogger(PentominoesIndexController.class);
-	@FXML private ChoiceBox<Item> cboContainers = new ChoiceBox<Item>();
-	@FXML private Button btnAddContainer;
-	@FXML TextField txtWidth;
-	@FXML TextField txtHeight;
-	@FXML TextField txtLength;
-	@FXML TextField txtValue;
-	@FXML TextField txtQty;
+
+	@FXML ChoiceBox<Pentomino> cboPentominoes;
+	@FXML TableView<Pentomino> tblPentominoes;
+	@FXML Button btnClearPentos;
+	@FXML Button btnAddPento;
+	@FXML Button btnClearOutput;
+	@FXML Button btnPackAll;
+	@FXML TableView<LayeredContainer> tblOutput;
 	@FXML TextField txtID;
-	@FXML TableView<Item> tblContainers;
-	@FXML TableColumn<Item, Integer> colID;
-	@FXML TableColumn<Item, Double> colWidth;
-	@FXML TableColumn<Item, Double> colHeight;
-	@FXML TableColumn<Item, Double>  colLength;
-	@FXML TableColumn<Item, Integer>  colQuantity;
-	@FXML TableColumn<Item, Double>  colValue;
-	@FXML TableColumn<Item, Double>  colVolume;
-	int incrementalID = 1;
-
+	@FXML TextField txtValue;
+	@FXML TableColumn<LayeredContainer, Integer> colOutputID;
+	@FXML TableColumn<LayeredContainer, Double> colOutputLength;
+	@FXML TableColumn<LayeredContainer, Double> colOutputWidth;
+	@FXML TableColumn<LayeredContainer, Double> colOutputHeight;
+	@FXML TableColumn<LayeredContainer, Double> colOutputValue;
 	
-	@FXML TableView <ContainerPackingResult> tblOutput;
-	@FXML TableColumn<ContainerPackingResult, Double> colOutWidth;
-	@FXML TableColumn<ContainerPackingResult, Double> colOutHeight;
-	@FXML TableColumn<ContainerPackingResult, Double> colOutLength;
-	@FXML TableColumn<ContainerPackingResult, Double> colOutValue;
-	@FXML TableColumn<ContainerPackingResult, Integer> colOutContainers;
-	@FXML TableColumn<ContainerPackingResult, Long> colOutPackTime;
-	@FXML TableColumn<ContainerPackingResult, Double> colOutPackedVolumePercentage;
-	@FXML TableColumn<ContainerPackingResult, Double> colOutVolume;
+	@FXML TableColumn<Pentomino, Integer> colInputID;
+	@FXML TableColumn<Pentomino, Double> colInputHeight;
+	@FXML TableColumn<Pentomino, Double> colInputValue;
+	@FXML TableColumn<Pentomino, Color> colInputColor;
+	@FXML ImageView imgPento;
 	@SuppressWarnings("rawtypes")
-	@FXML TableColumn colOutView;
-	@FXML TextField txtX;
+	@FXML TableColumn colOutputView;
 	
-	private void setDefaultTextBox() {
-		this.txtID.setText(String.valueOf(incrementalID));
-		this.txtQty.setText("1");
-		this.txtValue.setText("1");
+	@FXML public void clearOutput() { tblOutput.getItems().clear(); }
+	@FXML public void clearPentos() { tblPentominoes.getItems().clear(); }
+	@FXML public void goBack() {}
+	
+	@FXML public void packAll() {
+		List<Pentomino> Pentominoes = tblPentominoes.getItems();
+		Layering3DPentominoesSolver Solver3D = new Layering3DPentominoesSolver(2.5, 4, 16);
+		ArrayList<LayeredContainer> Solution = Solver3D.PackAll(Pentominoes);
+		tblOutput.getItems().addAll(Solution);
+	}
+	@FXML public void fitInOne() {
+		List<Pentomino> Pentominoes = tblPentominoes.getItems();
+		Layering3DPentominoesSolver Solver3D = new Layering3DPentominoesSolver(2.5, 4, 16);
+		LayeredContainer Solution = Solver3D.Pack(Pentominoes);
+		tblOutput.getItems().add(Solution);
+	}
+	
+	@FXML
+	public void addPento() {
+		if (!validInputNumbers()) {
+			new Alert(AlertType.WARNING, "The ID and value have to be non-negative numbers.", ButtonType.OK).show();
+			return;
+		}
+		Pentomino selectedPento = cboPentominoes.getSelectionModel().getSelectedItem();
+		selectedPento.setId(Integer.valueOf(txtID.getText()));
+		tblPentominoes.getItems().add(selectedPento);
+	}
+	private boolean validInputNumbers() {
+		return ControllersHelper.validNumber(txtID.getText()) &&
+				ControllersHelper.validNumber(txtValue.getText());
+	}
+	private void setupCboPentominoes() {
+		cboPentominoes.getItems().setAll(PentominoesDefaultFactory.Create('L'), PentominoesDefaultFactory.Create('P'),
+				PentominoesDefaultFactory.Create('T'));
+		cboPentominoes.setOnAction(this::setPentoImage);
+		cboPentominoes.getSelectionModel().selectFirst();
 	}
 
-	private void setupCboContainer() {
-		cboContainers.getItems().setAll(new ClassAContainer(1, 0, 0), new ClassBContainer(2, 0, 0), new ClassCContainer(3, 0, 0));
-		cboContainers.setOnAction(this::setContainerProps);
-		this.cboContainers.getSelectionModel().selectFirst();
+	private void setPentoImage(ActionEvent action) {
+		Character pentoChar = cboPentominoes.getSelectionModel().getSelectedItem().getTypeChar();
+		imgPento.setImage(new Image(getClass().getResourceAsStream("/images/" + pentoChar + ".png")));
 	}
+
 	private void setupInputTable() {
-		colID.setCellValueFactory(new PropertyValueFactory<Item, Integer>("id"));
-		colWidth.setCellValueFactory(new PropertyValueFactory<Item, Double>("dim1"));
-		colHeight.setCellValueFactory(new PropertyValueFactory<Item, Double>("dim2"));
-		colLength.setCellValueFactory(new PropertyValueFactory<Item, Double>("dim3"));
-		colQuantity.setCellValueFactory(new PropertyValueFactory<Item, Integer>("quantity"));
-		colValue.setCellValueFactory(new PropertyValueFactory<Item, Double>("value"));
-		colVolume.setCellValueFactory(new PropertyValueFactory<Item, Double>("volume"));
+		colInputID.setCellValueFactory(new PropertyValueFactory<Pentomino, Integer>("id"));
+		colInputHeight.setCellValueFactory(new PropertyValueFactory<Pentomino, Double>("height"));
+		colInputValue.setCellValueFactory(new PropertyValueFactory<Pentomino, Double>("value"));
+		colInputColor.setCellValueFactory(new PropertyValueFactory<Pentomino, Color>("color"));
 	}
+
 	@SuppressWarnings("unchecked")
 	private void setupOutputTable() {
-		colOutPackTime.setCellValueFactory(new PropertyValueFactory<ContainerPackingResult, Long>("packTimeInMilliseconds"));
-		colOutPackedVolumePercentage.setCellValueFactory(new PropertyValueFactory<ContainerPackingResult, Double>("percentContainerVolumePacked"));
-		colOutWidth.setCellValueFactory(new PropertyValueFactory<ContainerPackingResult, Double>("containerWidth"));
-		colOutHeight.setCellValueFactory(new PropertyValueFactory<ContainerPackingResult, Double>("containerHeight"));
-		colOutLength.setCellValueFactory(new PropertyValueFactory<ContainerPackingResult, Double>("containerLength"));
-		colOutVolume.setCellValueFactory(new PropertyValueFactory<ContainerPackingResult,Double>("containerVolume"));
-		colOutContainers.setCellValueFactory(new PropertyValueFactory<ContainerPackingResult, Integer>("packedItemsCount"));
-		colOutValue.setCellValueFactory(new PropertyValueFactory<ContainerPackingResult, Double>("value"));
-		colOutView.setCellFactory(ActionButtonTableCell.<ContainerPackingResult>forTableColumn("View", (ContainerPackingResult a) -> {
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Pentominoes3DViewer.fxml"));
-			Parent root1;
-			try {
-				root1 = (Parent) fxmlLoader.load();
-			} catch (IOException e) {
-				log.debug(e.getMessage());
-				return;
-			}
-			root1.setStyle("-fx-background-color: transparent;");
-		    Stage stage = new Stage();
-		    stage.setTitle("3D viewer");
-		    Scene scene = new Scene(root1, 1000, 1000, true);
-					
-			PerspectiveCamera camera = new PerspectiveCamera(true);
-			camera.setTranslateX(0);
-			camera.setTranslateY(-100);
-			camera.setTranslateZ(-100);
-			camera.setFieldOfView(90);
-			scene.setCamera(camera);
+
+		colOutputID.setCellValueFactory(new PropertyValueFactory<LayeredContainer, Integer>("id"));
+		colOutputLength.setCellValueFactory(new PropertyValueFactory<LayeredContainer, Double>("length"));
+		colOutputWidth.setCellValueFactory(new PropertyValueFactory<LayeredContainer, Double>("width"));
+		colOutputHeight.setCellValueFactory(new PropertyValueFactory<LayeredContainer, Double>("height"));
+		colOutputValue.setCellValueFactory(new PropertyValueFactory<LayeredContainer, Double>("value"));
+		colOutputView
+				.setCellFactory(ActionButtonTableCell.<LayeredContainer>forTableColumn("View", (LayeredContainer a) -> {
+
+					String fxmlFile = "/fxml/Pentominoes3DViewer.fxml";
+					FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+					Parent rootNode = null;
+					try {
+						rootNode = loader.load();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					rootNode.setStyle("-fx-background-color: transparent;");
 					 
-		    stage.setScene(scene);  
-		    Pentominoes3DViewerController controller = 
-		    		fxmlLoader.<Pentominoes3DViewerController>getController();
-		    controller.initData(a, new DefaultContainer(0));
-		    stage.show();
-		}));    
+					Scene scene = new Scene(rootNode, 700, 600);
+					PerspectiveCamera camera = new PerspectiveCamera();
+					camera.setTranslateY(-100);
+					camera.setTranslateZ(-300);
+					scene.setCamera(camera);
+					Stage stage = new Stage();
+					stage.setTitle("Pentominos3D");
+					stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/ksirtet.png")));
+					stage.setScene(scene);
+					Pentominoes3DViewerController controller = loader.<Pentominoes3DViewerController>getController();
+					controller.initData(a);
+					stage.show();
+				}));
 	}
+	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		setDefaultTextBox(); 
-		setupCboContainer();
+		setupCboPentominoes();
 		setupInputTable();
 		setupOutputTable();
-	}
-	
-	public void setContainerProps(ActionEvent action) {
-		Item selected = cboContainers.getSelectionModel().getSelectedItem();
-		txtWidth.setText(String.valueOf(selected.getDim1()));
-		txtHeight.setText(String.valueOf(selected.getDim2()));
-		txtLength.setText(String.valueOf(selected.getDim3()));
-	}
-	public void addContainer(ActionEvent action) {
-		if(!validInputNumber()) {
-			new Alert(AlertType.WARNING, "You should only input non-negative numeric values.", ButtonType.OK).show();
-			return;
-		}
-		Item toBeAdded = ItemsFactory.Create(cboContainers.getSelectionModel().getSelectedItem().getClass().getName(),
-				Integer.valueOf(txtQty.getText()),
-				Double.valueOf(txtValue.getText()),
-				Integer.valueOf(txtID.getText()));
-		if(tryAddToExistingClass(toBeAdded))
-			return;
-		tblContainers.getItems().add(toBeAdded);
-	}
-	private boolean validInputNumber() {
-		return ControllersHelper.validNumber(txtQty.getText())
-				&& ControllersHelper.validNumber(txtValue.getText())
-				&& ControllersHelper.validNumber(txtID.getText());
-	}
-
-	private boolean tryAddToExistingClass(Item item) {
-		for(int i = 0; i < tblContainers.getItems().size();i++) {
-			Item existingItem = tblContainers.getItems().get(i);
-			if(existingItem.getClass() == item.getClass() && existingItem.getValue() == item.getValue()) {
-				existingItem.setQuantity(existingItem.getQuantity()+item.getQuantity());
-				tblContainers.getItems().set(i, existingItem);
-				return true;
-			}
-		}
-		return false;
-	}
-	//TODO: change the table to use the ContainerPackingResult directly.
-	public void packAll() {
-		List<Item> Items = tblContainers.getItems();
-		ArrayList<ContainerPackingResult> PackingResults =  PackingService.PackAll(Items, new DefaultContainer(1));
-		for(ContainerPackingResult res : PackingResults) {
-			tblOutput.getItems().addAll(res);
-		}
-	}
-
-	@FXML public void pack()	{
-		List<Item> Items = tblContainers.getItems();
-		ContainerPackingResult packingResult = PackingService.Pack(new DefaultContainer(1), Items);
-		tblOutput.getItems().addAll(packingResult);
 		
 	}
-	public void clearItems() {
-		tblContainers.getItems().clear();
-	}
-	public void clearOutput() {
-		tblOutput.getItems().clear();
-	}
-	
-	
+
 }

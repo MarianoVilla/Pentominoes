@@ -17,11 +17,16 @@ import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class PentominoesHomeController implements Initializable {
+/**
+ * Home page controller.
+ *
+ */
+public class HomeController implements Initializable {
 	
 	@FXML
 	AnchorPane pane;
@@ -33,8 +38,16 @@ public class PentominoesHomeController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		setupAnimation();
+		setBoxMaterial();
+	}
+	private void setBoxMaterial() {
+		Image diffuseMap = new Image("/images/MetalTexture.jpg");
+		PhongMaterial material = new PhongMaterial();
+		material.setDiffuseMap(diffuseMap);
+		spinningBox.setMaterial(material);
 	}
 	private void setupAnimation() {
+
 		RotateTransition rotate = new RotateTransition(Duration.millis(10000), spinningBox);
 		rotate.setAxis(new Point3D(1,1,0));
 		rotate.setByAngle(360);
@@ -46,7 +59,7 @@ public class PentominoesHomeController implements Initializable {
 	}
 	public void startBoxPacking() throws IOException {
 	    Stage stage = new Stage();
-		String fxmlFile = "/fxml/PentominoesIndex.fxml";
+		String fxmlFile = "/fxml/BoxIndex.fxml";
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
 		Parent rootNode = (Parent) loader.load();
 		Scene scene = new Scene(rootNode);
@@ -59,10 +72,10 @@ public class PentominoesHomeController implements Initializable {
 	}
 	public void startPentominoesPacking() throws IOException {	
 	    Stage stage = new Stage();
-		String fxmlFile = "/fxml/TetrisLikeIndex.fxml";
+		String fxmlFile = "/fxml/PentominoesIndex.fxml";
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
 		Parent rootNode = (Parent) loader.load();
-		Scene scene = new Scene(rootNode, 750, 600);
+		Scene scene = new Scene(rootNode, 720, 550);
 		scene.getStylesheets().add("/styles/styles.css");
 
 		stage.setTitle("Pentominoes Packing");
