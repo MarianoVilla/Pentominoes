@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Point3D?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Box?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="558.0" prefWidth="678.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Pentominos3d.UI.HomeController">
+   <children>
+      <Group layoutX="339.0" layoutY="237.0" />
+      <Box fx:id="spinningBox" depth="200.0" height="200.0" layoutX="151.0" layoutY="404.0" rotate="-9.5" width="200.0">
+         <rotationAxis>
+            <Point3D x="1.0" y="1.0" z="1.0" />
+         </rotationAxis>
+      </Box>
+      <Label layoutX="178.0" layoutY="41.0" styleClass="lblMenuOption" text="Box Packing" textAlignment="CENTER" onMouseClicked="#startBoxPacking">
+         <font>
+            <Font size="61.0" />
+         </font>
+      </Label>
+      <Label layoutX="54.0" layoutY="149.0" styleClass="lblMenuOption" text="Pentominoes Packing" textAlignment="CENTER" onMouseClicked="#startPentominoesPacking">
+         <font>
+            <Font size="61.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
