@@ -25,18 +25,17 @@ public class MainApp extends Application {
     }
 
 	public void start(Stage stage) throws Exception {
-
-		String fxmlFile = "/fxml/HomePage.fxml";
+		String fxmlFile = "/HomePage.fxml";
 		log.debug("Home FXML page: " + fxmlFile);
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
 		Parent rootNode = (Parent) loader.load();
 		HostServices services = this.getHostServices(); 
-		String url = services.resolveURI(services.getCodeBase(), "images/containers.jpg");
+		String url = services.resolveURI(services.getCodeBase(), "/containers.jpg");
 		rootNode.setStyle("-fx-background-image: url('"+url+"');");
 		Scene scene = new Scene(rootNode,700,600);
 		stage.setResizable(false);
-		stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/ksirtet.png")));
-		scene.getStylesheets().add("/styles/styles.css");
+		stage.getIcons().add(new Image(getClass().getResourceAsStream("/ksirtet.png")));
+		scene.getStylesheets().add("/styles.css");
 		stage.setTitle("Pentominos3D");
 		stage.setScene(scene);
 		stage.show();

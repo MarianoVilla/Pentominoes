@@ -6,14 +6,12 @@ import java.util.ResourceBundle;
 
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
-import javafx.animation.ParallelTransition;
 import javafx.animation.RotateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point3D;
 import javafx.scene.Parent;
-import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
@@ -41,7 +39,7 @@ public class HomeController implements Initializable {
 		setBoxMaterial();
 	}
 	private void setBoxMaterial() {
-		Image diffuseMap = new Image("/images/MetalTexture.jpg");
+		Image diffuseMap = new Image("/MetalTexture.jpg");
 		PhongMaterial material = new PhongMaterial();
 		material.setDiffuseMap(diffuseMap);
 		spinningBox.setMaterial(material);
@@ -59,29 +57,29 @@ public class HomeController implements Initializable {
 	}
 	public void startBoxPacking() throws IOException {
 	    Stage stage = new Stage();
-		String fxmlFile = "/fxml/BoxIndex.fxml";
+		String fxmlFile = "/BoxIndex.fxml";
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
 		Parent rootNode = (Parent) loader.load();
 		Scene scene = new Scene(rootNode);
-		scene.getStylesheets().add("/styles/styles.css");
+		scene.getStylesheets().add("/styles.css");
 		stage.setTitle("Box Packing");
 		stage.setResizable(false);
 		stage.setScene(scene);
-		stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/ksirtet.png")));
+		stage.getIcons().add(new Image(getClass().getResourceAsStream("/ksirtet.png")));
 		stage.show();
 	}
 	public void startPentominoesPacking() throws IOException {	
 	    Stage stage = new Stage();
-		String fxmlFile = "/fxml/PentominoesIndex.fxml";
+		String fxmlFile = "/PentominoesIndex.fxml";
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
 		Parent rootNode = (Parent) loader.load();
 		Scene scene = new Scene(rootNode, 720, 550);
-		scene.getStylesheets().add("/styles/styles.css");
+		scene.getStylesheets().add("/styles.css");
 
 		stage.setTitle("Pentominoes Packing");
 		stage.setResizable(false);
 		stage.setScene(scene);
-		stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/t.png")));
+		stage.getIcons().add(new Image(getClass().getResourceAsStream("/T.png")));
 		stage.show();
 	}
 	

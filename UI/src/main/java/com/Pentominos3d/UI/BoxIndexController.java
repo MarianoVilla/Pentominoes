@@ -5,12 +5,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import Entities.*;
 import Services.ItemsFactory;
 import Services.BoxPackingService;
@@ -21,14 +18,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
-import javafx.scene.SceneAntialiasing;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 /**
  * A controller in charge of the Box packing setting up UI.
  *
@@ -109,7 +103,7 @@ public class BoxIndexController implements Initializable {
 		colOutContainers.setCellValueFactory(new PropertyValueFactory<ContainerPackingResult, Integer>("packedItemsCount"));
 		colOutValue.setCellValueFactory(new PropertyValueFactory<ContainerPackingResult, Double>("value"));
 		colOutView.setCellFactory(ActionButtonTableCell.<ContainerPackingResult>forTableColumn("View", (ContainerPackingResult a) -> {
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Box3DViewer.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Box3DViewer.fxml"));
 			Parent root1;
 			try {
 				root1 = (Parent) fxmlLoader.load();
@@ -126,7 +120,7 @@ public class BoxIndexController implements Initializable {
 			camera.setTranslateY(-300);
 			camera.setTranslateZ(0);
 			scene.setCamera(camera);
-			stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/ksirtet.png")));
+			stage.getIcons().add(new Image(getClass().getResourceAsStream("/ksirtet.png")));
 		    stage.setScene(scene);  
 		    Box3DViewerController controller = 
 		    		fxmlLoader.<Box3DViewerController>getController();

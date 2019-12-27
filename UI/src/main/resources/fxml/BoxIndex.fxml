@@ -106,12 +106,12 @@
             <Font size="22.0" />
          </font>
       </Button>
-      <Button id="btnPack" layoutX="778.0" layoutY="198.0" mnemonicParsing="false" onAction="#clearItems" prefHeight="52.0" prefWidth="89.0" text="Clear">
+      <Button id="btnPack" layoutX="782.0" layoutY="198.0" mnemonicParsing="false" onAction="#clearItems" prefHeight="52.0" prefWidth="89.0" text="Clear">
          <font>
             <Font size="22.0" />
          </font>
       </Button>
-      <Button id="btnPack" layoutX="778.0" layoutY="457.0" mnemonicParsing="false" onAction="#clearOutput" prefHeight="52.0" prefWidth="89.0" text="Clear">
+      <Button id="btnPack" layoutX="782.0" layoutY="457.0" mnemonicParsing="false" onAction="#clearOutput" prefHeight="52.0" prefWidth="89.0" text="Clear">
          <font>
             <Font size="22.0" />
          </font>

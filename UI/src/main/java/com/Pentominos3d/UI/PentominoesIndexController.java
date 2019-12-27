@@ -26,6 +26,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.TableColumn;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.stage.Stage;
 
 public class PentominoesIndexController implements Initializable {
@@ -55,19 +59,29 @@ public class PentominoesIndexController implements Initializable {
 	
 	@FXML public void clearOutput() { tblOutput.getItems().clear(); }
 	@FXML public void clearPentos() { tblPentominoes.getItems().clear(); }
-	@FXML public void goBack() {}
 	
 	@FXML public void packAll() {
+		if(noPentos())
+			return;
 		List<Pentomino> Pentominoes = tblPentominoes.getItems();
 		Layering3DPentominoesSolver Solver3D = new Layering3DPentominoesSolver(2.5, 4, 16);
 		ArrayList<LayeredContainer> Solution = Solver3D.PackAll(Pentominoes);
 		tblOutput.getItems().addAll(Solution);
 	}
 	@FXML public void fitInOne() {
+		if(noPentos())
+			return;
 		List<Pentomino> Pentominoes = tblPentominoes.getItems();
 		Layering3DPentominoesSolver Solver3D = new Layering3DPentominoesSolver(2.5, 4, 16);
 		LayeredContainer Solution = Solver3D.Pack(Pentominoes);
 		tblOutput.getItems().add(Solution);
+	}
+	private boolean noPentos() {
+		if(tblPentominoes.getItems().size() == 0) {
+			new Alert(AlertType.WARNING, "First add some pentominoes.", ButtonType.OK).show();
+			return true;
+		}
+		return false;
 	}
 	
 	@FXML
@@ -93,7 +107,7 @@ public class PentominoesIndexController implements Initializable {
 
 	private void setPentoImage(ActionEvent action) {
 		Character pentoChar = cboPentominoes.getSelectionModel().getSelectedItem().getTypeChar();
-		imgPento.setImage(new Image(getClass().getResourceAsStream("/images/" + pentoChar + ".png")));
+		imgPento.setImage(new Image(getClass().getResourceAsStream("/" + pentoChar + ".png")));
 	}
 
 	private void setupInputTable() {
@@ -114,7 +128,7 @@ public class PentominoesIndexController implements Initializable {
 		colOutputView
 				.setCellFactory(ActionButtonTableCell.<LayeredContainer>forTableColumn("View", (LayeredContainer a) -> {
 
-					String fxmlFile = "/fxml/Pentominoes3DViewer.fxml";
+					String fxmlFile = "/Pentominoes3DViewer.fxml";
 					FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
 					Parent rootNode = null;
 					try {
@@ -131,7 +145,7 @@ public class PentominoesIndexController implements Initializable {
 					scene.setCamera(camera);
 					Stage stage = new Stage();
 					stage.setTitle("Pentominos3D");
-					stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/ksirtet.png")));
+					stage.getIcons().add(new Image(getClass().getResourceAsStream("/ksirtet.png")));
 					stage.setScene(scene);
 					Pentominoes3DViewerController controller = loader.<Pentominoes3DViewerController>getController();
 					controller.initData(a);

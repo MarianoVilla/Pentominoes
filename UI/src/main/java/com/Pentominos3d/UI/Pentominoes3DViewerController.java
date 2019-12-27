@@ -1,22 +1,26 @@
 package com.Pentominos3d.UI;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import TetrisLike3DSolver.LayeredContainer;
 import TetrisLike3DSolver.PentoColor;
 import TetrisLike3DSolver.Pentomino;
-import TetrisLike3DSolver.PentominoesDefaultFactory;
 import TetrisLike3DSolver.SolutionLayer;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -29,9 +33,7 @@ import javafx.scene.transform.Rotate;
  */
 public class Pentominoes3DViewerController implements Initializable {
 	
-	private static final int XSCALE = 40;
-	private static final int YSCALE = 40;
-	private static final int ZSCALE = 40;
+	private static final int SCALE = 40;
 	private SmartGroup group;
     final String cssDefault = "-fx-border-color: blue;\n"
             + "-fx-border-insets: 5;\n"
@@ -48,7 +50,7 @@ public class Pentominoes3DViewerController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		this.group = new SmartGroup();
-		pane.setPrefSize( Double.MAX_VALUE, Double.MAX_VALUE );
+		pane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
 	}
 	/**
 	 * Initializes from a List of layered containers. 
@@ -58,7 +60,7 @@ public class Pentominoes3DViewerController implements Initializable {
 		double containerOffset = 0;
 		for(LayeredContainer container : containers) {
 			drawLayeredContainer(container, containerOffset);
-			containerOffset += ((container.getWidth() * XSCALE)*2)+5;
+			containerOffset += ((container.getWidth() * SCALE)*2)+5;
 		}
 		translateGroup();
 		pane.getChildren().add(group);
@@ -87,13 +89,13 @@ public class Pentominoes3DViewerController implements Initializable {
 	}
 	private void drawContainer(LayeredContainer container) {
 		Box containerBox = new Box(container.getLength(), container.getHeight(), container.getWidth());
-		containerBox.setScaleX(XSCALE);
-		containerBox.setScaleY(YSCALE);
-		containerBox.setScaleZ(ZSCALE);
+		containerBox.setScaleX(SCALE);
+		containerBox.setScaleY(SCALE);
+		containerBox.setScaleZ(SCALE);
 		containerBox.setDrawMode(DrawMode.LINE);
-		containerBox.setTranslateX(XSCALE*8-10);
-		containerBox.setTranslateY(YSCALE+30);
-		containerBox.setTranslateZ(ZSCALE-60);
+		containerBox.setTranslateX(SCALE*8-10);
+		containerBox.setTranslateY(SCALE+30);
+		containerBox.setTranslateZ(SCALE-60);
 		group.getChildren().add(containerBox);
 	}
 	private void drawLayers(List<SolutionLayer> layers, double xOffset) {
@@ -105,12 +107,12 @@ public class Pentominoes3DViewerController implements Initializable {
 					if(board[i][j] == 0) 
 						continue;
 					Box newBox = new Box(0.5, 0.5, 0.5);
-					newBox.setScaleX(XSCALE);
-					newBox.setScaleY(YSCALE);
-					newBox.setScaleZ(ZSCALE);
-					newBox.setTranslateX(((i*XSCALE)+xOffset)/2);
-					newBox.setTranslateY((j*YSCALE)/2);
-					newBox.setTranslateZ((zOffset+layer.getHeight())*ZSCALE);
+					newBox.setScaleX(SCALE);
+					newBox.setScaleY(SCALE);
+					newBox.setScaleZ(SCALE);
+					newBox.setTranslateX(((i*SCALE)+xOffset)/2);
+					newBox.setTranslateY((j*SCALE)/2);
+					newBox.setTranslateZ((zOffset+layer.getHeight())*SCALE);
 					newBox.setStyle(cssDefault);
 					Color color = getColorMapping(board[i][j]);
 					newBox.setMaterial(new PhongMaterial(color));

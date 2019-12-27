@@ -6,28 +6,18 @@ import java.util.ResourceBundle;
 import Entities.AlgorithmPackingResult;
 import Entities.Container;
 import Entities.ContainerPackingResult;
-import Entities.DefaultContainer;
 import Entities.Item;
-import javafx.application.HostServices;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Point3D;
 import javafx.scene.shape.Box;
-import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.DrawMode;
-import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
-import javafx.scene.Group;
-import javafx.scene.PerspectiveCamera;
-import javafx.scene.PointLight;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 
 /**
@@ -104,7 +94,7 @@ public class Box3DViewerController implements Initializable {
 			newBox.setScaleZ(SCALE);
 
 			PhongMaterial material = new PhongMaterial();
-			material.setDiffuseMap(new Image(getClass().getResourceAsStream("/images/MetalTexture.jpg")));
+			material.setDiffuseMap(new Image(getClass().getResourceAsStream("/MetalTexture.jpg")));
 			newBox.setMaterial(material);
 			newBox.setTranslateX((i.getCoordX() * SCALE) - 20);
 			newBox.setTranslateY((i.getCoordY() * SCALE) + 10);

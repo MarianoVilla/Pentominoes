@@ -6,7 +6,11 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources">
+	<classpathentry excluding="main/java/|main/resources/fxml/|main/resources/images/|main/resources/styles/|main/resources/|test/java/" kind="src" path="src"/>
+	<classpathentry kind="src" path="src/main/resources/fxml"/>
+	<classpathentry kind="src" path="src/main/resources/images"/>
+	<classpathentry kind="src" path="src/main/resources/styles"/>
+	<classpathentry excluding="**|fxml/|images/|styles/" kind="src" output="target/classes" path="src/main/resources">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
