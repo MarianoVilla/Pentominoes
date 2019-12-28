@@ -131,9 +131,13 @@ public class BoxPackingServiceTests {
 		Items.add(new ClassCItem(1, 20, 1));
 		PackingResults = BoxPackingService.pack(new DefaultContainer(1), Items).getAlgorithmPackingResults().get(0);
 		
-		for(int i = 0; i < PackingResults.getPackedItems().size()-1; i++) {
-			if(isOverlapping(PackingResults.getPackedItems().get(i), PackingResults.getPackedItems().get(i+1)))
-				assertTrue(false);
+		for(int i = 0; i < PackingResults.getPackedItemsCount(); i++) {
+			for(int j = 0; j < PackingResults.getPackedItemsCount(); j++) {
+				if(i == j)
+					continue;
+				if(isOverlapping(PackingResults.getPackedItems().get(i), PackingResults.getPackedItems().get(j)))
+					assertTrue(false);
+			}
 		}
 	}
     private boolean isOverlapping(Item a, Item b)
