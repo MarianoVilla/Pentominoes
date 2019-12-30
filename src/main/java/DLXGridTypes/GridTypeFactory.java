@@ -85,7 +85,12 @@ public class GridTypeFactory
    static private MutableTreeNode createNode(Object nodeData){
       if( nodeData instanceof IGridType ){
          return new DefaultMutableTreeNode(nodeData) {
-            public String toString(){
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			public String toString(){
                return ((IGridType)getUserObject()).getDisplayName();
             }
          };

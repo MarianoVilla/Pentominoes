@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import TestHelpers.TestRepo;
-import TetrisLike2DSolver.PentominoDatabase;
 import TetrisLike2DSolver.Pentominoes2DSolver;
 import TetrisLike3DSolver.Pentomino;
 

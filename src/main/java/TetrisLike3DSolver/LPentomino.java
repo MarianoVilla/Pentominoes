@@ -53,6 +53,9 @@ public class LPentomino extends Pentomino {
 	public String getPolyRepresentation(int Qty) {
 		return "tile flip " + Qty + " ((0,0)(0,1)(0,2)(0,3)(1,0))" + " __polyID: 8";
 	}
+	public static String getStaticPolyRepresentation(int Qty) {
+		return "tile flip "+Qty+" ((0,0)(0,1)(0,2)(0,3)(1,0)) __polyID: 8\r\n";
+	}
 
 
 }

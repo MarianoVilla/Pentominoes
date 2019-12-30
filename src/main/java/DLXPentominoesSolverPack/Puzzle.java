@@ -81,8 +81,6 @@ private class Stack {
 }
 
 public Puzzle(){
-   //int numRetained = PolySolver.settingsManager.getIntSetting(PolySolver.settingKeySolutionsRetained);
-   //System.out.println("maxnumsol="+numRetained);
    solutions = new ForgetfulList<Solution>(0);
 }
 
@@ -395,9 +393,9 @@ public String textRepr(boolean allowLarge){
 
 //all solver stuff
 
-// initialise just before solving / playing
+// Initialize just before solving / playing
 public boolean prepareSolve(){
-   // make sure everything is ok
+   // make sure everything is OK.
    if( ! isValid() ) return true;
 
    clearBoard();

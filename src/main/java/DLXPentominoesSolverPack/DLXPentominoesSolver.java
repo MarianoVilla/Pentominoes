@@ -7,11 +7,15 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import TetrisLike3DSolver.LPentomino;
 import TetrisLike3DSolver.LayeredContainer;
 import TetrisLike3DSolver.LayersPacker;
 import TetrisLike3DSolver.NullPentomino;
+import TetrisLike3DSolver.PPentomino;
 import TetrisLike3DSolver.Pentomino;
 import TetrisLike3DSolver.SolutionLayer;
+import TetrisLike3DSolver.TPentomino;
+
 import java.util.Map;
 
 public class DLXPentominoesSolver {
@@ -22,12 +26,6 @@ public class DLXPentominoesSolver {
 			"# 3 pieces\r\n";
 	private String mode = "mode UseMost ";
 	private LayersPacker layersPacker;
-	//TODO: hardcoded.
-	private double containerHeightState = 4;
-	private double layersHeight = 0.5;
-	//Each one is 5 blocks, and our container is 32*5 (16*2.5 doubled to make it integer).
-	//Hence, it can at most fit 32 pentominoes per layer. We'll use this maximum to get the most valuable pentoes prioritized.
-	private int maxAmountPossible = 32;
 	
 	//The complete list of pentos we received. the preferred list will get the items from here.
 	private List<Pentomino> pentominoesToPlace = new ArrayList<Pentomino>();
@@ -35,7 +33,7 @@ public class DLXPentominoesSolver {
 	private int LPentos = 0;
 	private int PPentos = 0;
 	private int TPentos = 0;
-	//For now, the value will be one for each type of pento. The ideal would be to have an individual value.
+	//For now, the value will be one for each type of pento. Therefore, we assume a 1-1 relation between the pentominoes and their values.
 	//TODO: check this.
 	private double LValue = 0;
 	private double PValue = 0;
@@ -44,21 +42,61 @@ public class DLXPentominoesSolver {
 	//True when we've packed every pentomino or the container can't fit any more layers.
 	private boolean allDone = false;
 	
+	double containerWidth = 8;
+	double containerHeight = 4;
+	double containerLength = 32;
+	//Used to keep track of the remaining container height as we add layers to it.
+	private double containerHeightState = 4;
+	//Each one is 5 blocks, and our container is 32*5 (16*2.5 doubled to make it integer).
+	//Hence, it can at most fit 32 pentominoes per layer. We'll use this maximum to get the most valuable pentoes prioritized.
+	private int maxAmountPossible = 32;
+	private double layersHeight = 0.5;
 	
+	/**
+	 * This constructor will use the given container dimensions. Still, the layersHeight is still hardcoded to .5.
+	 * @param containerHeight Will be multiplied by 2!
+	 * @param containerWidth Will be multiplied by 2!
+	 * @param containerLength Will be multiplied by 2!
+	 */
+	public DLXPentominoesSolver(double containerHeight, double containerWidth, double containerLength) {
+		this.containerHeight = containerHeight * 2;
+		this.containerWidth = containerWidth * 2;
+		this.containerLength = containerLength * 2;
+		this.layersPacker = new LayersPacker(this.containerWidth, this.containerHeight, this.containerLength, layersHeight);
+	}
+	/**
+	 * This constructor will use the default container size to work the solutions.
+	 */
 	public DLXPentominoesSolver() {
-		//TODO: hardcoded.
-		this.layersPacker = new LayersPacker(8, 4, 32, 0.5);
+		this.layersPacker = new LayersPacker(this.containerWidth, this.containerHeight, this.containerLength, layersHeight);
 	}
 	public LayeredContainer Pack(List<Pentomino> Pentominoes){
 		try {
 			solve(Pentominoes);
 		} catch (IOException e) {
 			e.printStackTrace();
+			cleanUp();
 			return container;
 		}
+		cleanUp();
 		return container;
 	}
-	//The most valuable pentominoes.
+	public ArrayList<LayeredContainer>PackAll(List<Pentomino> Pentominoes){ return null; }
+	//
+	/*
+	 * private ArrayList<LayeredContainer> PackAll(List<Pentomino> Pentominoes){
+	 * ArrayList<LayeredContainer> containers = new ArrayList<LayeredContainer>();
+	 * int totalAmount = Pentominoes.stream().mapToInt(p -> p.getQty()).sum();
+	 * pentominoesToPlace = Pentominoes; pentominoesToPlace.sort((p1, p2) ->
+	 * Double.compare(p2.getValue(), p1.getValue())); while(totalAmount > 0) {
+	 * LayeredContainer container = Pack(pentominoesToPlace); totalAmount -=
+	 * container.getPackedItemsCount(); containers.add(Pack(pentominoesToPlace)); }
+	 * return containers; }
+	 */
+	private void cleanUp() {
+		resetPentoCounters();
+		containerValue = 0;
+	}
 	private List<Pentomino> preferredList = new ArrayList<Pentomino>();
 	private void solve(List<Pentomino> Pentominoes) throws IOException {
 		pentominoesToPlace = Pentominoes;
@@ -67,30 +105,9 @@ public class DLXPentominoesSolver {
 		processPentos();
 		parseToPuzzleString();
 		computeLayeredSolution();
-		
-	}
-	private void fillPreferredList(){
-		if(preferredList.size() > 0 && preferredList.stream().mapToInt(p -> p.getQty()).sum() >= maxAmountPossible)
-			return;
-		if(pentominoesToPlace.size() == 0 && preferredList.size() == 0) {
-			allDone = true;
-			return;
-		}
-		if(pentominoesToPlace.size() == 1 && preferredList.size() == 0) {
-			preferredList = pentominoesToPlace;
-			return;
-		}
-		int i = 0;
-		//preferredList.add(pentominoesToPlace.get(i)); 
-		//pentominoesToPlace.remove(i);
-		while(preferredList.stream().mapToInt(p -> p.getQty()).sum() < maxAmountPossible && pentominoesToPlace.size() > i) {
-			preferredList.add(pentominoesToPlace.get(i));
-			pentominoesToPlace.remove(i);
-			i++;
-		}
 	}
 	private void processPentos() {
-		LPentos = PPentos = TPentos = 0;
+		resetPentoCounters();
 		for(Pentomino p : preferredList) {
 			switch(p.getTypeID()) {
 			case 8: LPentos += p.getQty(); LValue = p.getValue(); break;
@@ -98,6 +115,9 @@ public class DLXPentominoesSolver {
 			case 3: TPentos += p.getQty(); TValue = p.getValue(); break;
 			}
 		}
+	}
+	private void resetPentoCounters() {
+		LPentos = PPentos = TPentos = 0;
 	}
 	Puzzle puzzle;
 	private boolean stillRunning = false;
@@ -115,7 +135,6 @@ public class DLXPentominoesSolver {
 				puzThread.run();
 				puzThread.join();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return;
 			};
@@ -170,13 +189,13 @@ public class DLXPentominoesSolver {
 				mode;
 	}
 	private String LPentosString() {
-		return LPentos > 0 ? "tile flip "+LPentos+" ((0,0)(0,1)(0,2)(0,3)(1,0)) __polyID: 8\r\n" : "";
+		return LPentos > 0 ? LPentomino.getStaticPolyRepresentation(LPentos) : "";
 	}
 	private String PPentosString() {
-		return PPentos > 0 ? "tile flip "+PPentos+" ((0,0)(0,1)(0,2)(1,0)(1,1)) __polyID: 9\r\n" : "";
+		return PPentos > 0 ? PPentomino.getStaticPolyRepresentation(PPentos) : "";
 	}
 	private String TPentosString() {
-		return TPentos > 0 ? "tile flip "+TPentos+" ((0,0)(1,0)(1,1)(1,2)(2,0)) __polyID: 3\r\n" : "";
+		return TPentos > 0 ? TPentomino.getStaticPolyRepresentation(TPentos) : "";
 	}
 	private void addUsedPentos(DLXPentominoesSolverPack.Solution sol) {
 		int placedPentos = sol.getNumPoly();
@@ -185,57 +204,77 @@ public class DLXPentominoesSolver {
 			if(used == 0)
 				continue;
 			switch(sol.getPoly(i).getPolyID()) {
-			case 8: handleLPento(used); break;
-			case 9: handlePPento(used); break;
-			case 3: handleTPento(used); break;
+				case 8: handleLPento(used); break;
+				case 9: handlePPento(used); break;
+				case 3: handleTPento(used); break;
 			}
 		}
 	}
 	
-	//TODO: fix globals. They'll be problematic for PackAll.
+	//Preferred List handling.
+	private void fillPreferredList(){
+		if(preferredList.size() > 0 && preferredList.stream().mapToInt(p -> p.getQty()).sum() >= maxAmountPossible)
+			return;
+		if(noMorePentos()) {
+			allDone = true;
+			return;
+		}
+		if(onlyOne()) {
+			preferredList = pentominoesToPlace;
+			return;
+		}
+		transferPentosToPreferredList();
+	}
+	private boolean noMorePentos() {
+		return pentominoesToPlace.size() == 0 && preferredList.size() == 0;
+	}
+	private boolean onlyOne() {
+		return pentominoesToPlace.size() == 1 && preferredList.size() == 0;
+	}
+	private void transferPentosToPreferredList() {
+		int i = 0;
+		while(preferredList.stream().mapToInt(p -> p.getQty()).sum() < maxAmountPossible && pentominoesToPlace.size() > i) {
+			preferredList.add(pentominoesToPlace.get(i));
+			pentominoesToPlace.remove(i);
+			i++;
+		}
+	}
+	
 	double containerValue = 0;
-	//TODO: generalize.
 	private void handleLPento(int used) {
 		for(int i = 0; i < used; i++) {
 			LPentos--;
 			containerValue += LValue;
 		}
-		Pentomino pentoFromPreferredList = preferredList.stream().filter(p -> p.getTypeChar() == 'L').findFirst().orElse(new NullPentomino());
-		if(pentoFromPreferredList.getRepresentation() != null) {
-			if(LPentos == 0)
-				preferredList.remove(pentoFromPreferredList);
-			else
-				pentoFromPreferredList.setQty(LPentos);
-		}
+		updatePreferredList('L', LPentos);
 	}
+	
 	private void handlePPento(int used) {
 		for(int i = 0; i < used; i++) {
 			PPentos--;
 			containerValue += PValue;
 		}
-		Pentomino pentoFromPreferredList = preferredList.stream().filter(p -> p.getTypeChar() == 'P').findFirst().orElse(new NullPentomino());
-		if(pentoFromPreferredList.getRepresentation() != null) {
-			if(PPentos == 0)
-				preferredList.remove(pentoFromPreferredList);
-			else
-				pentoFromPreferredList.setQty(PPentos);
-		}
-	}
-	private int getRemaining() {
-		return LPentos + PPentos + TPentos;
+		updatePreferredList('P', PPentos);
 	}
 	private void handleTPento(int used) {
 		for(int i = 0; i < used; i++) {
 			TPentos--;
 			containerValue += TValue;
 		}
-		Pentomino pentoFromPreferredList = preferredList.stream().filter(p -> p.getTypeChar() == 'T').findFirst().orElse(new NullPentomino());
-		if(pentoFromPreferredList.getRepresentation() != null) {
-			if(TPentos == 0)
-				preferredList.remove(pentoFromPreferredList);
-			else
-				pentoFromPreferredList.setQty(TPentos);
-		}
+		updatePreferredList('T', TPentos);
+	}
+	private void updatePreferredList(Character pentoCharType, int newQty) {
+		Pentomino pentoFromPreferredList = preferredList.stream().filter(p -> p.getTypeChar() == pentoCharType)
+				.findFirst().orElse(new NullPentomino());
+		if (pentoFromPreferredList instanceof NullPentomino)
+			return;
+		if (newQty == 0)
+			preferredList.remove(pentoFromPreferredList);
+		else
+			pentoFromPreferredList.setQty(newQty);
+	}
+	private int getRemaining() {
+		return LPentos + PPentos + TPentos;
 	}
 	private void addLayer(SolutionLayer layer) {
 		containerHeightState -= layersHeight;
