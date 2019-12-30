@@ -92,4 +92,13 @@ public class Layering3DPentominoesSolverTests {
 		assertEquals(2, Solution.getPackedItemsCount());
 		assertEquals(101, Solution.getValue(), 0.0001);
 	}
+	@Test
+	public void testPack_StressTest() {
+		ArrayList<Pentomino> Pentominoes = TestRepo.getPentos(50, 'L');
+		Layering3DPentominoesSolver Solver3D = new Layering3DPentominoesSolver(2.5,4,16);
+		
+		LayeredContainer Solution = Solver3D.Pack(Pentominoes);
+		
+		assertEquals(25, Solution.getPackedItemsCount());
+	}
 }

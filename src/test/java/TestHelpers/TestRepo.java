@@ -21,6 +21,12 @@ public class TestRepo {
 	public static ArrayList<Pentomino> getPentos(int howMany, Character typeChar){
 		return PentominoesDefaultFactory.CreateMany(howMany, typeChar);
 	}
+	public static Pentomino getMultiPento(int howMany, Character typeChar) {
+		return PentominoesDefaultFactory.CreateMulti(typeChar, howMany);
+	}
+	public static Pentomino getMultiPento(int howMany, Character typeChar, double value) {
+		return PentominoesDefaultFactory.CreateMulti(typeChar, howMany, 0, value);
+	}
 	public static ArrayList<Pentomino> getPentos(int howMany, Character typeChar, double value){
 		return PentominoesDefaultFactory.CreateMany(howMany, typeChar, value);
 	}

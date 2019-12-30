@@ -32,6 +32,36 @@ public class PentominoesDefaultFactory {
 			default: throw new IllegalArgumentException("No known pentomino.");
 		}
 	}
+	public static Pentomino Create(Character typeCharCode, int qty) {
+		switch(Character.toUpperCase(typeCharCode)) {
+		    case '0': return new NullPentomino(0,0,0);
+		    case ' ': return new NullPentomino(0,0,0);
+			case 'L': return new LPentomino(0, 0.5, 1.0, qty);
+			case 'P': return new PPentomino(0, 0.5, 2.0, qty);
+			case 'T': return new TPentomino(0, 0.5, 3.0, qty);
+			default: throw new IllegalArgumentException("No known pentomino.");
+		}
+	}
+	public static Pentomino CreateMulti(Character typeCharCode, int qty) {
+		switch(Character.toUpperCase(typeCharCode)) {
+	    case '0': return new NullPentomino(0,0,0);
+	    case ' ': return new NullPentomino(0,0,0);
+		case 'L': return new LPentomino(0, 0.5, 1.0, qty);
+		case 'P': return new PPentomino(0, 0.5, 2.0, qty);
+		case 'T': return new TPentomino(0, 0.5, 3.0, qty);
+		default: throw new IllegalArgumentException("No known pentomino.");
+	}
+	}
+	public static Pentomino CreateMulti(Character typeCharCode, int qty, int id, double value) {
+		switch(Character.toUpperCase(typeCharCode)) {
+	    case '0': return new NullPentomino(0,0,0);
+	    case ' ': return new NullPentomino(0,0,0);
+		case 'L': return new LPentomino(id, 0.5, value, qty);
+		case 'P': return new PPentomino(id, 0.5, value, qty);
+		case 'T': return new TPentomino(id, 0.5, value, qty);
+		default: throw new IllegalArgumentException("No known pentomino.");
+	}
+	}
 	public static Pentomino Create(char typeCharCode, double value) {
 		switch(Character.toUpperCase(typeCharCode)) {
 		    case '0': return new NullPentomino(0,0,0);

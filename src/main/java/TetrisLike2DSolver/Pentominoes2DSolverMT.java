@@ -292,10 +292,13 @@ public class Pentominoes2DSolverMT {
 
 				if (pentomino instanceof TPentomino) {
 					/**
-					 * ### # #
+					 * ###
+					 *  #
+					 *  #
 					 */
 					for (int y = 0; y <= board.length - 3; y++) {
 						for (int x = 0; x <= board[0].length - 3; x++) {
+							
 							if (board[y][x] == 0 && board[y][x + 1] == 0 && board[y + 1][x + 1] == 0
 									&& board[y + 2][x + 1] == 0 && board[y][x + 2] == 0) {
 								// we found a hole that fits this block, we'll place it here and see if the
@@ -422,12 +425,11 @@ public class Pentominoes2DSolverMT {
 							}
 						}
 					}
-
 				}
 				// find ALL places where we can place this block. for each place, a new work
 				// unit is created with the block in that location
 				// P shaped.
-				if (pentomino instanceof PPentomino) {
+				else if (pentomino instanceof PPentomino) {
 					/**
 					 * ## ## #
 					 */
@@ -675,7 +677,7 @@ public class Pentominoes2DSolverMT {
 					}
 				}
 				// L shaped.
-				if (pentomino instanceof LPentomino) {
+				else if (pentomino instanceof LPentomino) {
 					/**
 					 * # # # ##
 					 */

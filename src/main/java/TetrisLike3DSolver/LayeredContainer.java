@@ -11,6 +11,7 @@ import Entities.Container;
  */
 public class LayeredContainer extends Container {
 	
+	private Integer packedItemsCount;
 	public LayeredContainer(int id, double length, double width, double height) {
 		super(id, length, width, height);
 	}
@@ -21,10 +22,13 @@ public class LayeredContainer extends Container {
 	}
 	@Override
 	public double getValue() {
-		return this.layers.stream().mapToDouble(x -> x.getValue()).sum();
+		return super.getValue() == 0 ? this.layers.stream().mapToDouble(x -> x.getValue()).sum() : super.getValue();
 	}
 	public int getPackedItemsCount() {
-		return this.layers.stream().mapToInt(x -> x.getItemsCount()).sum();
+		return packedItemsCount == null ? this.layers.stream().mapToInt(x -> x.getItemsCount()).sum() : packedItemsCount;
+	}
+	public void setPackedItemsCount(int count) {
+		this.packedItemsCount = count;
 	}
 	
 }

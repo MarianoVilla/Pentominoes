@@ -19,6 +19,9 @@ public class TPentomino extends Pentomino {
 	public TPentomino(int id, double height, double value) {
 		super(id, height, value);
 	}
+	public TPentomino(int id, double height, double value, int Qty) {
+		super(id, height, value, Qty);
+	}
 	
 	@Override
 	public int[][] getRepresentation() {
@@ -38,6 +41,15 @@ public class TPentomino extends Pentomino {
 	@Override
 	public int getTypeID() {
 		return typeID;
+	}
+	@Override
+	public String getPolyRepresentation() {
+		return this.getQty() > 0 ?  "tile flip " + this.getQty() + " ((0,0)(1,0)(1,1)(1,2)(2,0))" + " __polyID: 3"
+				: "tile flip((0,0)(1,0)(1,1)(1,2)(2,0))" + " __polyID: 3";
+	}
+	@Override
+	public String getPolyRepresentation(int Qty) {
+		return "tile flip " + Qty + " ((0,0)(1,0)(1,1)(1,2)(2,0))" + " __polyID: 3";
 	}
 
 }

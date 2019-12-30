@@ -11,14 +11,22 @@ public abstract class Pentomino {
 	int id;
 	double height;
 	public double value;
+	public int qty;
 	public abstract int[][] getRepresentation();
+	public abstract String getPolyRepresentation();
+	public abstract String getPolyRepresentation(int Qty);
 	
+	public Pentomino(int id, double height, double value, int Qty) {
+		this.id = id;
+		this.height = height;
+		this.value = value;
+		this.qty = Qty;
+	}
 	public Pentomino(int id, double height, double value) {
 		this.id = id;
 		this.height = height;
 		this.value = value;
 	}
-	
 	public int getId() {
 		return this.id;
 	}
@@ -31,6 +39,15 @@ public abstract class Pentomino {
 	}
 	public double getValue() {
 		return this.value;
+	}
+	public void setValue(double value) {
+		this.value = value;
+	}
+	public int getQty() {
+		return this.qty;
+	}
+	public void setQty(int qty) {
+		this.qty = qty;
 	}
 	//This assumes that every Pentomino is made out of 0.5 x 0.5 x 0.5 boxes.
 	public double getWidth() {
