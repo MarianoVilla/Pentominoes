@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import DLXPentominoesSolverPack.DLXPentominoesSolver;
 import TetrisLike3DSolver.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,10 +27,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.TableColumn;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.stage.Stage;
 
 public class PentominoesIndexController implements Initializable {
@@ -48,14 +45,17 @@ public class PentominoesIndexController implements Initializable {
 	@FXML TableColumn<LayeredContainer, Double> colOutputWidth;
 	@FXML TableColumn<LayeredContainer, Double> colOutputHeight;
 	@FXML TableColumn<LayeredContainer, Double> colOutputValue;
+	@FXML TableColumn<LayeredContainer, Integer> colOutputItems;
 	
 	@FXML TableColumn<Pentomino, Integer> colInputID;
 	@FXML TableColumn<Pentomino, Double> colInputHeight;
 	@FXML TableColumn<Pentomino, Double> colInputValue;
 	@FXML TableColumn<Pentomino, Color> colInputColor;
+	@FXML TableColumn<Pentomino, Integer> colInputQty;
 	@FXML ImageView imgPento;
 	@SuppressWarnings("rawtypes")
 	@FXML TableColumn colOutputView;
+	@FXML TextField txtQty;
 	
 	@FXML public void clearOutput() { tblOutput.getItems().clear(); }
 	@FXML public void clearPentos() { tblPentominoes.getItems().clear(); }
@@ -68,13 +68,14 @@ public class PentominoesIndexController implements Initializable {
 		ArrayList<LayeredContainer> Solution = Solver3D.PackAll(Pentominoes);
 		tblOutput.getItems().addAll(Solution);
 	}
-	@FXML public void fitInOne() {
+	@FXML public void fitInOne() throws IOException {
 		if(noPentos())
 			return;
 		List<Pentomino> Pentominoes = tblPentominoes.getItems();
-		Layering3DPentominoesSolver Solver3D = new Layering3DPentominoesSolver(2.5, 4, 16);
-		LayeredContainer Solution = Solver3D.Pack(Pentominoes);
+		DLXPentominoesSolver solver = new DLXPentominoesSolver();
+		LayeredContainer Solution = solver.Pack(Pentominoes);
 		tblOutput.getItems().add(Solution);
+		clearPentos();
 	}
 	private boolean noPentos() {
 		if(tblPentominoes.getItems().size() == 0) {
@@ -90,13 +91,29 @@ public class PentominoesIndexController implements Initializable {
 			new Alert(AlertType.WARNING, "The ID and value have to be non-negative numbers.", ButtonType.OK).show();
 			return;
 		}
-		Pentomino selectedPento = cboPentominoes.getSelectionModel().getSelectedItem();
-		selectedPento.setId(Integer.valueOf(txtID.getText()));
+		Pentomino selectedPento = PentominoesDefaultFactory.CreateMulti(cboPentominoes.getSelectionModel().getSelectedItem().getTypeChar(),
+				Integer.valueOf(txtQty.getText()),
+				Integer.valueOf(txtID.getText()),
+				Double.valueOf(txtValue.getText()));
+		if(tryAddToExistingClass(selectedPento))
+			return;
 		tblPentominoes.getItems().add(selectedPento);
+	}
+	private boolean tryAddToExistingClass(Pentomino pento) {
+		for(int i = 0; i < tblPentominoes.getItems().size();i++) {
+			Pentomino existingPento = tblPentominoes.getItems().get(i);
+			if(existingPento.getClass() == pento.getClass() && existingPento.getValue() == pento.getValue()) {
+				existingPento.setQty(existingPento.getQty()+pento.getQty());
+				tblPentominoes.getItems().set(i, existingPento);
+				return true;
+			}
+		}
+		return false;
 	}
 	private boolean validInputNumbers() {
 		return ControllersHelper.validNumber(txtID.getText()) &&
-				ControllersHelper.validNumber(txtValue.getText());
+				ControllersHelper.validNumber(txtValue.getText()) &&
+				ControllersHelper.validNumber(txtQty.getText());
 	}
 	private void setupCboPentominoes() {
 		cboPentominoes.getItems().setAll(PentominoesDefaultFactory.Create('L'), PentominoesDefaultFactory.Create('P'),
@@ -108,13 +125,39 @@ public class PentominoesIndexController implements Initializable {
 	private void setPentoImage(ActionEvent action) {
 		Character pentoChar = cboPentominoes.getSelectionModel().getSelectedItem().getTypeChar();
 		imgPento.setImage(new Image(getClass().getResourceAsStream("/" + pentoChar + ".png")));
+		centerImage();
 	}
+	private void centerImage() {
+        Image img = imgPento.getImage();
+        if (img != null) {
+            double w = 0;
+            double h = 0;
+
+            double ratioX = imgPento.getFitWidth() / img.getWidth();
+            double ratioY = imgPento.getFitHeight() / img.getHeight();
+
+            double reducCoeff = 0;
+            if(ratioX >= ratioY) {
+                reducCoeff = ratioY;
+            } else {
+                reducCoeff = ratioX;
+            }
+
+            w = img.getWidth() * reducCoeff;
+            h = img.getHeight() * reducCoeff;
+
+            imgPento.setX((imgPento.getFitWidth() - w) / 2);
+            imgPento.setY((imgPento.getFitHeight() - h) / 2);
+
+        }
+    }
 
 	private void setupInputTable() {
 		colInputID.setCellValueFactory(new PropertyValueFactory<Pentomino, Integer>("id"));
 		colInputHeight.setCellValueFactory(new PropertyValueFactory<Pentomino, Double>("height"));
 		colInputValue.setCellValueFactory(new PropertyValueFactory<Pentomino, Double>("value"));
 		colInputColor.setCellValueFactory(new PropertyValueFactory<Pentomino, Color>("color"));
+		colInputQty.setCellValueFactory(new PropertyValueFactory<Pentomino, Integer>("qty"));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -125,6 +168,7 @@ public class PentominoesIndexController implements Initializable {
 		colOutputWidth.setCellValueFactory(new PropertyValueFactory<LayeredContainer, Double>("width"));
 		colOutputHeight.setCellValueFactory(new PropertyValueFactory<LayeredContainer, Double>("height"));
 		colOutputValue.setCellValueFactory(new PropertyValueFactory<LayeredContainer, Double>("value"));
+		colOutputItems.setCellValueFactory(new PropertyValueFactory<LayeredContainer,Integer>("packedItemsCount"));
 		colOutputView
 				.setCellFactory(ActionButtonTableCell.<LayeredContainer>forTableColumn("View", (LayeredContainer a) -> {
 

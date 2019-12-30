@@ -10,20 +10,21 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="524.0" prefWidth="729.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Pentominos3d.UI.PentominoesIndexController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="524.0" prefWidth="799.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Pentominos3d.UI.PentominoesIndexController">
    <children>
-      <ChoiceBox fx:id="cboPentominoes" layoutX="22.0" layoutY="75.0" prefHeight="54.0" prefWidth="197.0" />
-      <Label layoutX="35.0" layoutY="14.0" prefHeight="54.0" prefWidth="160.0" text="Pento Type">
+      <ChoiceBox fx:id="cboPentominoes" layoutX="22.0" layoutY="75.0" prefHeight="54.0" prefWidth="140.0" />
+      <Label layoutX="53.0" layoutY="14.0" prefHeight="54.0" prefWidth="78.0" text="Type">
          <font>
             <Font size="31.0" />
          </font>
       </Label>
-      <TableView fx:id="tblPentominoes" layoutX="406.0" layoutY="72.0" prefHeight="206.0" prefWidth="304.0">
+      <TableView fx:id="tblPentominoes" layoutX="406.0" layoutY="72.0" prefHeight="206.0" prefWidth="379.0">
         <columns>
           <TableColumn fx:id="colInputID" prefWidth="75.0" text="ID" />
           <TableColumn fx:id="colInputHeight" prefWidth="75.0" text="Height" />
             <TableColumn fx:id="colInputValue" prefWidth="75.0" text="Value" />
-            <TableColumn fx:id="colInputColor" prefWidth="77.0" text="Color" />
+            <TableColumn fx:id="colInputColor" prefWidth="78.0" text="Color" />
+            <TableColumn fx:id="colInputQty" prefWidth="75.0" text="Qty" />
         </columns>
       </TableView>
       <Label layoutX="441.0" layoutY="14.0" prefHeight="54.0" prefWidth="78.0" text="Input">
@@ -31,50 +32,57 @@
             <Font size="31.0" />
          </font>
       </Label>
-      <Button fx:id="btnClearPentos" layoutX="229.0" layoutY="222.0" mnemonicParsing="false" onAction="#clearPentos" prefHeight="54.0" prefWidth="173.0" text="Clear">
+      <Button fx:id="btnClearPentos" layoutX="245.0" layoutY="222.0" mnemonicParsing="false" onAction="#clearPentos" prefHeight="54.0" prefWidth="157.0" text="Clear">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="btnAddPento" layoutX="228.0" layoutY="139.0" mnemonicParsing="false" onAction="#addPento" prefHeight="54.0" prefWidth="173.0" text="Add">
+      <Button fx:id="btnAddPento" layoutX="244.0" layoutY="142.0" mnemonicParsing="false" onAction="#addPento" prefHeight="54.0" prefWidth="157.0" text="Add">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <TableView fx:id="tblOutput" layoutX="232.0" layoutY="309.0" prefHeight="200.0" prefWidth="479.0">
+      <TableView fx:id="tblOutput" layoutX="232.0" layoutY="309.0" prefHeight="200.0" prefWidth="554.0">
         <columns>
           <TableColumn fx:id="colOutputID" prefWidth="75.0" text="ID" />
           <TableColumn fx:id="colOutputLength" prefWidth="75.0" text="Length" />
             <TableColumn fx:id="colOutputWidth" prefWidth="75.0" text="Width" />
             <TableColumn fx:id="colOutputHeight" prefWidth="75.0" text="Height" />
+            <TableColumn fx:id="colOutputItems" prefWidth="75.0" text="Items" />
             <TableColumn fx:id="colOutputValue" prefWidth="77.0" text="Value" />
             <TableColumn fx:id="colOutputView" prefWidth="101.0" text="View" />
         </columns>
       </TableView>
-      <Button fx:id="btnClearOutput" layoutX="121.0" layoutY="456.0" mnemonicParsing="false" onAction="#clearOutput" prefHeight="54.0" prefWidth="100.0" text="Clear">
+      <Button fx:id="btnClearOutput" layoutX="94.0" layoutY="453.0" mnemonicParsing="false" onAction="#clearOutput" prefHeight="54.0" prefWidth="127.0" text="Clear">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="btnPackAll" layoutX="22.0" layoutY="309.0" mnemonicParsing="false" onAction="#packAll" prefHeight="54.0" prefWidth="197.0" text="Pack All">
+      <Button fx:id="btnPackAll" disable="true" layoutX="22.0" layoutY="309.0" mnemonicParsing="false" onAction="#packAll" prefHeight="54.0" prefWidth="197.0" text="Pack All" visible="false">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="btnFitInOne" layoutX="22.0" layoutY="375.0" mnemonicParsing="false" onAction="#fitInOne" prefHeight="54.0" prefWidth="197.0" text="Fit in one">
+      <Button fx:id="btnFitInOne" layoutX="23.0" layoutY="309.0" mnemonicParsing="false" onAction="#fitInOne" prefHeight="54.0" prefWidth="197.0" text="Pack">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <TextField fx:id="txtID" layoutX="322.0" layoutY="74.0" prefHeight="56.0" prefWidth="78.0" />
-      <Label layoutX="344.0" layoutY="14.0" prefHeight="54.0" prefWidth="35.0" text="ID">
+      <TextField fx:id="txtID" layoutX="166.0" layoutY="74.0" prefHeight="56.0" prefWidth="72.0" />
+      <Label layoutX="181.0" layoutY="14.0" prefHeight="54.0" prefWidth="35.0" text="ID">
          <font>
             <Font size="31.0" />
          </font>
       </Label>
-      <ImageView fx:id="imgPento" fitHeight="140.0" fitWidth="197.0" layoutX="22.0" layoutY="139.0" pickOnBounds="true" preserveRatio="true" />
-      <TextField fx:id="txtValue" layoutX="227.0" layoutY="74.0" prefHeight="56.0" prefWidth="91.0" />
-      <Label layoutX="232.0" layoutY="14.0" prefHeight="54.0" prefWidth="78.0" text="Value">
+      <ImageView fx:id="imgPento" fitHeight="140.0" fitWidth="127.0" layoutX="22.0" layoutY="142.0" pickOnBounds="true" preserveRatio="true" />
+      <TextField fx:id="txtValue" layoutX="244.0" layoutY="74.0" prefHeight="56.0" prefWidth="78.0" />
+      <Label layoutX="244.0" layoutY="14.0" prefHeight="54.0" prefWidth="78.0" text="Value">
+         <font>
+            <Font size="31.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txtQty" layoutX="329.0" layoutY="74.0" prefHeight="56.0" prefWidth="72.0" />
+      <Label layoutX="334.0" layoutY="14.0" prefHeight="54.0" prefWidth="57.0" text="Qty">
          <font>
             <Font size="31.0" />
          </font>

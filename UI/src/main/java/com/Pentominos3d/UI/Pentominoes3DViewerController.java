@@ -13,14 +13,8 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -32,13 +26,10 @@ import javafx.scene.transform.Rotate;
  *
  */
 public class Pentominoes3DViewerController implements Initializable {
-	
+
 	private static final int SCALE = 40;
 	private SmartGroup group;
-    final String cssDefault = "-fx-border-color: blue;\n"
-            + "-fx-border-insets: 5;\n"
-            + "-fx-border-width: 3;\n"
-            + "-fx-border-style: dashed;\n";
+	final String cssDefault = "-fx-border-width: 3;";
 	@FXML
 	AnchorPane pane;
 	double anchorX, anchorY;
@@ -46,109 +37,97 @@ public class Pentominoes3DViewerController implements Initializable {
 	double anchorAngleY = 0;
 	private final DoubleProperty angleX = new SimpleDoubleProperty();
 	private final DoubleProperty angleY = new SimpleDoubleProperty();
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		this.group = new SmartGroup();
 		pane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
 	}
 	/**
-	 * Initializes from a List of layered containers. 
-	 * @param containers
-	 */
-	public void initData(List<LayeredContainer> containers) {
-		double containerOffset = 0;
-		for(LayeredContainer container : containers) {
-			drawLayeredContainer(container, containerOffset);
-			containerOffset += ((container.getWidth() * SCALE)*2)+5;
-		}
-		translateGroup();
-		pane.getChildren().add(group);
-		initMouseControl(this.group, this.pane.getScene());
-	}
-	/**
-	 * Initiliazes from a single layered container.
+	 * Initializes from a single layered container.
+	 * 
 	 * @param container
 	 */
 	public void initData(LayeredContainer container) {
 		drawLayeredContainer(container, 0);
-		translateGroup();
 		pane.getChildren().add(group);
+		translateGroup();
 		initMouseControl(this.group, this.group.getScene());
 	}
+
 	private void translateGroup() {
-		group.setTranslateX(100);
-		group.setTranslateY(250);
+		group.setTranslateX(50);
+		group.setTranslateY(0);
 		group.setTranslateZ(-300);
 	}
-	
 	private void drawLayeredContainer(LayeredContainer container, double containerOffset) {
 		drawLayers(container.getLayers(), containerOffset);
 		drawContainer(container);
-		
+
 	}
+
+	@Deprecated
 	private void drawContainer(LayeredContainer container) {
 		Box containerBox = new Box(container.getLength(), container.getHeight(), container.getWidth());
-		containerBox.setScaleX(SCALE);
-		containerBox.setScaleY(SCALE);
-		containerBox.setScaleZ(SCALE);
+		containerBox.setScaleX((SCALE / 2));
+		containerBox.setScaleY((SCALE / 2)+3);
+		containerBox.setScaleZ((SCALE / 2)+1);
 		containerBox.setDrawMode(DrawMode.LINE);
-		containerBox.setTranslateX(SCALE*8-10);
-		containerBox.setTranslateY(SCALE+30);
-		containerBox.setTranslateZ(SCALE-60);
+		containerBox.setTranslateX(310);
+		containerBox.setTranslateY(SCALE);
+		containerBox.setTranslateZ(90);
 		group.getChildren().add(containerBox);
 	}
+
 	private void drawLayers(List<SolutionLayer> layers, double xOffset) {
 		double zOffset = 0;
-		for(SolutionLayer layer : layers) {
+		for (SolutionLayer layer : layers) {
 			int[][] board = layer.getBoard();
-			for(int i = 0; i < board.length;i++) {
-				for(int j = 0;  j < board[0].length;j++) {
-					if(board[i][j] == 0) 
-						continue;
+			for (int i = 0; i < board.length; i++) {
+				for (int j = 0; j < board[0].length; j++) {
+					if (board[i][j] == 0) continue;
+					 
 					Box newBox = new Box(0.5, 0.5, 0.5);
 					newBox.setScaleX(SCALE);
 					newBox.setScaleY(SCALE);
 					newBox.setScaleZ(SCALE);
-					newBox.setTranslateX(((i*SCALE)+xOffset)/2);
-					newBox.setTranslateY((j*SCALE)/2);
-					newBox.setTranslateZ((zOffset+layer.getHeight())*SCALE);
-					newBox.setStyle(cssDefault);
+					newBox.setTranslateX(((j * SCALE) + xOffset) / 2);
+					newBox.setTranslateY((i * SCALE) / 2);
+					newBox.setTranslateZ((zOffset + layer.getHeight()) * SCALE);
 					Color color = getColorMapping(board[i][j]);
+					newBox.setStyle(cssDefault);
 					newBox.setMaterial(new PhongMaterial(color));
 					group.getChildren().add(newBox);
 				}
-			}	
+			}
 			zOffset += layer.getHeight();
 		}
 	}
-	
+
 	private Color getColorMapping(int pentoID) {
 		PentoColor pColor = Pentomino.typeIDColorMap.get(pentoID);
-		return pColor == null ? Color.BLACK : pColor.getFxColor();
+		return pColor == null ? Color.GHOSTWHITE : pColor.getFxColor();
 	}
+
 	private void initMouseControl(SmartGroup group, Scene scene) {
 		Rotate xRotate;
 		Rotate yRotate;
-		pane.getTransforms().addAll(
-				xRotate = new Rotate(0, Rotate.X_AXIS),
-				yRotate = new Rotate(0, Rotate.Y_AXIS)
-		);
+		pane.getTransforms().addAll(xRotate = new Rotate(0, Rotate.X_AXIS), yRotate = new Rotate(0, Rotate.Y_AXIS));
 		xRotate.angleProperty().bind(angleX);
 		yRotate.angleProperty().bind(angleY);
-		
-		scene.setOnMousePressed(event ->{
+
+		scene.setOnMousePressed(event -> {
 			anchorX = event.getSceneX();
 			anchorY = event.getSceneY();
 			anchorAngleX = angleX.get();
 			anchorAngleY = angleY.get();
 		});
-		
-		scene.setOnMouseDragged(event ->{
+
+		scene.setOnMouseDragged(event -> {
 			angleX.set(anchorAngleX - (anchorY - event.getSceneY()));
 			angleY.set(anchorAngleY - (anchorX - event.getSceneX()));
 		});
-		
+
 		pane.addEventHandler(ScrollEvent.SCROLL, event -> {
 			double delta = event.getDeltaY();
 			pane.translateZProperty().set(pane.getTranslateZ() - delta);

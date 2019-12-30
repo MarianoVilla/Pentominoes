@@ -73,7 +73,7 @@ public class HomeController implements Initializable {
 		String fxmlFile = "/PentominoesIndex.fxml";
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
 		Parent rootNode = (Parent) loader.load();
-		Scene scene = new Scene(rootNode, 720, 550);
+		Scene scene = new Scene(rootNode, 800, 540);
 		scene.getStylesheets().add("/styles.css");
 
 		stage.setTitle("Pentominoes Packing");
