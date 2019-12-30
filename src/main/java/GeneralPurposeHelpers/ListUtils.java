@@ -4,9 +4,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import TetrisLike3DSolver.Pentomino;
-
+/**
+ * General purpose List helper class. To abstract logic used in several places.
+ *
+ */
 public class ListUtils {
+	/**
+	 * Recursive permutations of a generic List.
+	 * @param <T> The type of the objects stored in the list.
+	 * @param list The list.
+	 * @return A List of every permutation of the given list.
+	 */
 	public static <T> List<List<T>> recursivePermutations(List<T> list) {
 
 	    if (list.size() == 0) {
@@ -31,20 +39,26 @@ public class ListUtils {
 	    }
 	    return returnMe;
 	}
-	public static <T> List<List<T>> nonRecursivePermutations(List<T> es){
+	/**
+	 * Non-recursive permutations of a generic List.
+	 * @param <T> The type of the objects stored in the list.
+	 * @param list The list.
+	 * @return A List of every permutation of the given list.
+	 */
+	public static <T> List<List<T>> nonRecursivePermutations(List<T> list){
 
 		  List<List<T>> permutations = new ArrayList<List<T>>();
 
-		  if(es.isEmpty()){
+		  if(list.isEmpty()){
 		    return permutations;
 		  }
 
 		  // We add the first element
-		  permutations.add(new ArrayList<T>(Arrays.asList(es.get(0))));
+		  permutations.add(new ArrayList<T>(Arrays.asList(list.get(0))));
 
-		  // Then, for all elements e in es (except from the first)
-		  for (int i = 1, len = es.size(); i < len; i++) {
-		    T e = es.get(i);
+		  // Then, for all elements e in list (except from the first)
+		  for (int i = 1, len = list.size(); i < len; i++) {
+		    T e = list.get(i);
 
 		    // We take remove each list l from 'permutations'
 		    for (int j = permutations.size() - 1; j >= 0; j--) {

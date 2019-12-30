@@ -1,6 +1,9 @@
 package Entities;
 
-
+/**
+ * An object to fit in a container.
+ *
+ */
 public class Item {
 
 
@@ -19,14 +22,15 @@ public class Item {
 	private double volume;
 	private double value;
 
-	/// <summary>
-	/// Initializes a new instance of the Item class.
-	/// </summary>
-	/// <param name="id">The item ID.</param>
-	/// <param name="dim1">The length of one of the three item dimensions.</param>
-	/// <param name="dim2">The length of another of the three item dimensions.</param>
-	/// <param name="dim3">The length of the other of the three item dimensions.</param>
-	/// <param name="itemQuantity">The item quantity.</param>
+	/**
+	 * Initializes a new instance of the Item class.
+	 * @param id The item ID.
+	 * @param dim1 The length of one of the three item dimensions.
+	 * @param dim2 The length of another of the three item dimensions.
+	 * @param dim3 The length of the other of the three item dimensions.
+	 * @param quantity The item quantity.
+	 * @param value The item value.
+	 */
 	public Item(Integer id, double dim1, double dim2, double dim3, int quantity, double value)
 	{
 		this.setId(id);

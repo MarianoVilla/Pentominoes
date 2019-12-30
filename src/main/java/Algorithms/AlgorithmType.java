@@ -1,9 +1,11 @@
 package Algorithms;
 
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.function.Supplier;
-
+/**
+ * Stores every box packing algorithm implementation.
+ * 
+ */
 public enum AlgorithmType {
 	EB_AFIT(1);
     private final int value;

@@ -5,6 +5,14 @@ import java.util.List;
 
 import Entities.*;
 
+/**
+ * Java implementation of Ethan Baltacioglu's heuristic for bin packing. A copy of the thesis can be found at:
+ * http://betterwaysystems.github.io/packer/reference/AirForceBinPacking.pdf
+ * The original code is written in C in the appendix B of the document.
+ * I based my implementation on this C# version: https://github.com/davidmchapman/3DContainerPacking.
+ * This version has an additional value constraint.
+ *
+ */
 public class EB_AFIT implements PackingAlgorithm{
 	public AlgorithmPackingResult Run(Container container, List<Item> items)
 	{
@@ -39,10 +47,12 @@ public class EB_AFIT implements PackingAlgorithm{
 	private ArrayList<Item> itemsToPack;
 	private ArrayList<Item> itemsPackedInOrder;
 	private ArrayList<Layer> layers;
+	@SuppressWarnings("unused")
 	private ContainerPackingResult result;
 
 	private ScrapPad scrapfirst;
 	private ScrapPad smallestZ;
+	@SuppressWarnings("unused")
 	private ScrapPad trash;
 
 	private Boolean evened;
@@ -58,7 +68,6 @@ public class EB_AFIT implements PackingAlgorithm{
 	private int boxi;
 	private int cboxi;
 	private int layerListLen;
-	private int packedItemCount;
 	private int x;
 
 	private double bbfx;
@@ -280,10 +289,7 @@ public class EB_AFIT implements PackingAlgorithm{
 	{
 		int itelayer;
 		int layersIndex;
-		double bestVolume = 0.0;
 		double bestValue = 0.0;
-		double layerValue = 0.0;
-
 		for (int containerOrientationVariant = 1; (containerOrientationVariant <= 6) && !quit; containerOrientationVariant++)
 		{
 			switchContainerOrientationVariant(container, containerOrientationVariant);
@@ -304,8 +310,6 @@ public class EB_AFIT implements PackingAlgorithm{
 				itelayer = layersIndex;
 				remainpy = py;
 				remainpz = pz;
-				packedItemCount = 0;
-
 				for (x = 1; x <= itemsToPackCount; x++)
 				{
 					itemsToPack.get(x).setPacked(false);
@@ -343,14 +347,7 @@ public class EB_AFIT implements PackingAlgorithm{
 				
 
 				
-				
-				/*
-				 * if ((packedVolume > bestVolume) && !quit) { bestVolume = packedVolume;
-				 * bestVariant = containerOrientationVariant; bestIteration = itelayer; }
-				 */
-				
 				if((packedValue > bestValue) && !quit) {
-					bestVolume = packedVolume;
 					bestValue = packedValue; 
 					bestVariant = containerOrientationVariant;
 					bestIteration = itelayer;
@@ -552,7 +549,7 @@ public class EB_AFIT implements PackingAlgorithm{
 	private void Initialize(Container container, List<Item> items)
 	{
 		itemsToPack = new ArrayList<Item>();
-		itemsPackedInOrder = new ArrayList<Item>(items.size());
+		itemsPackedInOrder = new ArrayList<Item>();
 		result = new ContainerPackingResult();
 
 		// The original code uses 1-based indexing everywhere. This fake entry is added to the beginning
@@ -1158,8 +1155,6 @@ public class EB_AFIT implements PackingAlgorithm{
 		packedVolume = packedVolume + itemsToPack.get(cboxi).getVolume();
 		//Addendum.
 		packedValue = packedValue + itemsToPack.get(cboxi).getValue();
-		packedItemCount++;
-
 		if (packingBest)
 		{
 			OutputBoxList();
@@ -1185,6 +1180,7 @@ public class EB_AFIT implements PackingAlgorithm{
 		/**
 		 * (Addendum.) The layer value. 
 		 */
+		@SuppressWarnings("unused")
 		public double LayerValue;
 
 		/**

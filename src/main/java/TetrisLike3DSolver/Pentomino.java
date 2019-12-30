@@ -3,12 +3,30 @@ package TetrisLike3DSolver;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * Abstraction for the pentomino entity. 
+ */
+@SuppressWarnings("serial")
 public abstract class Pentomino {
 	int id;
 	double height;
 	public double value;
+	public int qty;
 	public abstract int[][] getRepresentation();
+	public abstract String getPolyRepresentation();
+	public abstract String getPolyRepresentation(int Qty);
+	
+	public Pentomino(int id, double height, double value, int Qty) {
+		this.id = id;
+		this.height = height;
+		this.value = value;
+		this.qty = Qty;
+	}
+	public Pentomino(int id, double height, double value) {
+		this.id = id;
+		this.height = height;
+		this.value = value;
+	}
 	public int getId() {
 		return this.id;
 	}
@@ -22,6 +40,15 @@ public abstract class Pentomino {
 	public double getValue() {
 		return this.value;
 	}
+	public void setValue(double value) {
+		this.value = value;
+	}
+	public int getQty() {
+		return this.qty;
+	}
+	public void setQty(int qty) {
+		this.qty = qty;
+	}
 	//This assumes that every Pentomino is made out of 0.5 x 0.5 x 0.5 boxes.
 	public double getWidth() {
 		return this.getRepresentation().length * 0.5;
@@ -30,38 +57,34 @@ public abstract class Pentomino {
 	public String toString() {
 		return String.valueOf(getTypeChar());
 	}
+	//This assumes that every Pentomino is made out of 0.5 x 0.5 x 0.5 boxes.
 	public double getLength() {
 		return this.getRepresentation()[0].length * 0.5;
 	}
 	public abstract PentoColor getColor();
 	public abstract Character getTypeChar();
 	public abstract int getTypeID();
-	//A quick solution to store this mapping. Should be optimized.
+	
+	//A quick solution to store this mapping.
 	public static Map<Character, Integer> typeIDMap = new HashMap<Character, Integer>()
 	{{
 		put(LPentomino.typeChar, LPentomino.typeID);
 		put(PPentomino.typeChar, PPentomino.typeID);
 		put(TPentomino.typeChar, TPentomino.typeID );
 	}};
-	//Ídem.
+	//A quick solution to store this mapping.
 	public static Map<Character, PentoColor> typeColorMap = new HashMap<Character, PentoColor>()
 	{{
 		put(LPentomino.typeChar, new PentoColor(Color.PINK, javafx.scene.paint.Color.PINK));
 		put(PPentomino.typeChar, PPentomino.color);
 		put(TPentomino.typeChar, TPentomino.color);
 	}};
+	//A quick solution to store this mapping.
 	public static Map<Integer, PentoColor> typeIDColorMap = new HashMap<Integer, PentoColor>()
 	{{
-		//Haven't figured out just yet why, but when I try to use the static PentoColor in LPento from this map, it returns NULL.
-		//TODO: fix it.
 		put(LPentomino.typeID, new PentoColor(Color.PINK, javafx.scene.paint.Color.PINK));
 		put(PPentomino.typeID, PPentomino.color);
 		put(TPentomino.typeID, TPentomino.color);
 	}};
-	public Pentomino(int id, double height, double value) {
-		this.id = id;
-		this.height = height;
-		this.value = value;
-	}
  
 }

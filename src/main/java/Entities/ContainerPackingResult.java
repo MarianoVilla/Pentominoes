@@ -2,6 +2,10 @@ package Entities;
 
 import java.util.ArrayList;
 
+/**
+ * A container packing result is an abstraction that can hold multiple algorithm packing results for a given container.
+ *
+ */
 public class ContainerPackingResult {
 	
 	private Container container;
@@ -36,6 +40,10 @@ public class ContainerPackingResult {
 	public double getContainerVolume() {
 		return this.container.getVolume();
 	}
+	/**
+	 * The following three props are here to allow direct field binding from JavaFX.
+	 * Still, it's to be noted that we're assuming we'll always use the first packing result in this object.
+	 */
 	public long getPackTimeInMilliseconds() {
 		return this.algorithmPackingResults.get(0).getPackTimeInMilliseconds();
 	}
@@ -45,7 +53,7 @@ public class ContainerPackingResult {
 	public int getPackedItemsCount() {
 		return this.algorithmPackingResults.get(0).getPackedItemsCount();
 	}
-
+	
 	public void setAlgorithmPackingResults(ArrayList<AlgorithmPackingResult> algorithmPackingResults) {
 		this.algorithmPackingResults = algorithmPackingResults;
 	}

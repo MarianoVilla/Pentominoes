@@ -1,23 +1,25 @@
 package Services;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import Algorithms.*;
 import Entities.*;
-import GeneralPurposeHelpers.ListUtils;
 
-public class PackingService {
+/**
+ * Takes care of the box packing logic.
+ *
+ */
+public class BoxPackingService {
 
 	/**
 	 * The simplest version of the Pack method. Assumes the algorithm is EB_AFIT.
-	 * 
 	 * @param container
 	 * @param itemsToPack
 	 * @return
 	 */
-	public static ContainerPackingResult Pack(Container container, List<Item> itemsToPack) {
+	@SuppressWarnings("serial")
+	public static ContainerPackingResult pack(Container container, List<Item> itemsToPack) {
 
 		ContainerPackingResult containerPackingResult = new ContainerPackingResult();
 		containerPackingResult.setContainer(container);
@@ -51,8 +53,15 @@ public class PackingService {
 
 		return containerPackingResult;
 	}
-
-	public static ArrayList<ContainerPackingResult> Pack(List<Container> containers, List<Item> itemsToPack,
+	/**
+	 * Given a series of AlgorithmIDs, this method will compute the solution to a box packing problem with each of them.
+	 * As for the time of this writing, the only implemented algorithm for 3D bin packing is EB_AFIT, so this can be dismissed, and optionally deleted.
+	 * @param containers The containers in which the items go.
+	 * @param itemsToPack The items to be packed.
+	 * @param algorithmTypeIDs The algorithm IDs.
+	 * @return An ArrayList of ContainerPackingResult objects, one for each algorithm ID.
+	 */
+	public static ArrayList<ContainerPackingResult> pack(List<Container> containers, List<Item> itemsToPack,
 			List<Integer> algorithmTypeIDs) {
 		Object sync = new Object();
 		ArrayList<ContainerPackingResult> result = new ArrayList<ContainerPackingResult>();
@@ -63,7 +72,7 @@ public class PackingService {
 			algorithmTypeIDs.parallelStream().forEach((algorithmTypeID) -> {
 				PackingAlgorithm algorithm;
 				try {
-					algorithm = GetPackingAlgorithmFromTypeID(AlgorithmType.find(algorithmTypeID, () -> AlgorithmType.EB_AFIT));
+					algorithm = getPackingAlgorithmFromTypeID(AlgorithmType.find(algorithmTypeID, () -> AlgorithmType.EB_AFIT));
 				} catch (Exception e) {
 					return;
 				}
@@ -112,15 +121,15 @@ public class PackingService {
 	 * @param algorithmTypeIDs
 	 * @return
 	 */
-	public static ArrayList<ContainerPackingResult> PackAll(List<Item> itemsToPack, Container firstContainer) {
+	public static ArrayList<ContainerPackingResult> packAll(Container firstContainer, List<Item> itemsToPack) {
 		int i = firstContainer.getId();
 		ArrayList<ContainerPackingResult> PackingResults = new ArrayList<ContainerPackingResult>();
-		ContainerPackingResult Res = Pack(firstContainer, itemsToPack);
+		ContainerPackingResult Res = pack(firstContainer, itemsToPack);
 		PackingResults.add(Res);
 		ArrayList<Item> UnpackedItems = Res.getAlgorithmPackingResults().get(0).getUnpackedItems();
 		while (UnpackedItems.size() > 0) {
 			i++;
-			Res = Pack(firstContainer.clone(i), UnpackedItems);
+			Res = pack(firstContainer.clone(i), UnpackedItems);
 			UnpackedItems = Res.getAlgorithmPackingResults().get(0).getUnpackedItems();
 			PackingResults.add(Res);
 		}
@@ -133,7 +142,7 @@ public class PackingService {
 	 * @return An instance of a packing algorithm implementing AlgorithmBase.
 	 * @throws Exception: Invalid algorithm type.
 	 */
-	public static PackingAlgorithm GetPackingAlgorithmFromTypeID(AlgorithmType algorithmTypeID) throws Exception {
+	public static PackingAlgorithm getPackingAlgorithmFromTypeID(AlgorithmType algorithmTypeID) throws Exception {
 		switch (algorithmTypeID) {
 		case EB_AFIT:
 			return new EB_AFIT();

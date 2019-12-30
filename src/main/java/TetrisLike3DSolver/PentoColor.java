@@ -5,13 +5,33 @@ import java.awt.Color;
 /**
  * To avoid depending on color frameworks, and specially to avoid spreading color conversion logic all around, we have this class.
  * It wraps AWT and FX colors and overrides toString to get a descriptive name.
- * @author dager
- *
  */
 public class PentoColor {
 
 	private java.awt.Color awtColor;
 	private javafx.scene.paint.Color fxColor;
+	
+	/**
+	 * Strict implementation constructor.
+	 * @param awtColor
+	 * @param fxColor
+	 */
+	public PentoColor(java.awt.Color awtColor, javafx.scene.paint.Color fxColor) {
+		this.awtColor = awtColor;
+		this.fxColor = fxColor;
+	}
+	/**
+	 * RGBA constructor.
+	 * @param red
+	 * @param green
+	 * @param blue
+	 * @param opacity
+	 */
+	public PentoColor(float red, float green, float blue, float opacity) {
+		this.fxColor = new javafx.scene.paint.Color(red, green, blue, opacity);
+		this.awtColor = new java.awt.Color(red, green, blue, opacity);
+	}
+	
 	@Override
 	public String toString() {
 		String myColor = null;
@@ -40,11 +60,6 @@ public class PentoColor {
 			myColor = "Orange";
 		}
 		return myColor == null ? super.toString() : myColor;
-	}
-	//TODO: implement framework agnostic constructor.
-	public PentoColor(java.awt.Color awtColor, javafx.scene.paint.Color fxColor) {
-		this.awtColor = awtColor;
-		this.fxColor = fxColor;
 	}
 
 	public java.awt.Color getAwtColor() {

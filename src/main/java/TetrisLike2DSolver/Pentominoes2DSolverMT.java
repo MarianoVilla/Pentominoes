@@ -14,7 +14,11 @@ import java.util.stream.Collectors;
 
 import TetrisLike3DSolver.*;
 
-public class Pentominos2DSolverMT {
+/**
+ * A multi-threaded 2D pentominoes solver. Everything is in the same file to avoid cluttering the global space. Still, we could extract a few things.
+ * Hopefully I'll have time to: TODO: refactor.
+ */
+public class Pentominoes2DSolverMT {
 	public static final char L = 'l', P = 'p', T = 't';
 
 	private char[] blocks; // blocks to add
@@ -288,10 +292,13 @@ public class Pentominos2DSolverMT {
 
 				if (pentomino instanceof TPentomino) {
 					/**
-					 * ### # #
+					 * ###
+					 *  #
+					 *  #
 					 */
 					for (int y = 0; y <= board.length - 3; y++) {
 						for (int x = 0; x <= board[0].length - 3; x++) {
+							
 							if (board[y][x] == 0 && board[y][x + 1] == 0 && board[y + 1][x + 1] == 0
 									&& board[y + 2][x + 1] == 0 && board[y][x + 2] == 0) {
 								// we found a hole that fits this block, we'll place it here and see if the
@@ -418,12 +425,11 @@ public class Pentominos2DSolverMT {
 							}
 						}
 					}
-
 				}
 				// find ALL places where we can place this block. for each place, a new work
 				// unit is created with the block in that location
 				// P shaped.
-				if (pentomino instanceof PPentomino) {
+				else if (pentomino instanceof PPentomino) {
 					/**
 					 * ## ## #
 					 */
@@ -671,7 +677,7 @@ public class Pentominos2DSolverMT {
 					}
 				}
 				// L shaped.
-				if (pentomino instanceof LPentomino) {
+				else if (pentomino instanceof LPentomino) {
 					/**
 					 * # # # ##
 					 */
@@ -968,7 +974,7 @@ public class Pentominos2DSolverMT {
 	 * @param pBlocks number of P blocks
 	 * @param lBlocks number of L blocks
 	 */
-	public Pentominos2DSolverMT(int width, int height, int lBlocks, int pBlocks, int tBlocks) {
+	public Pentominoes2DSolverMT(int width, int height, int lBlocks, int pBlocks, int tBlocks) {
 		w = width;
 		h = height;
 		int nBlocks = lBlocks + pBlocks + tBlocks;
@@ -995,7 +1001,7 @@ public class Pentominos2DSolverMT {
 		queue.add(s);
 	}
 
-	public Pentominos2DSolverMT(int width, int height, List<Pentomino> pentos) {
+	public Pentominoes2DSolverMT(int width, int height, List<Pentomino> pentos) {
 
 		if ((pentos.size() * 5) > (width * height)) {
 			solved = true;
@@ -1345,9 +1351,9 @@ public class Pentominos2DSolverMT {
 	 * @return instance of solver. call solve() on it.
 	 * @throws IOException if read error occurs
 	 */
-	public static Pentominos2DSolverMT loadState(InputStream is) throws IOException {
+	public static Pentominoes2DSolverMT loadState(InputStream is) throws IOException {
 		DataInputStream dis = new DataInputStream(is);
-		Pentominos2DSolverMT ret = new Pentominos2DSolverMT(1, 1, 1, 1, 1); // initial dummy state
+		Pentominoes2DSolverMT ret = new Pentominoes2DSolverMT(1, 1, 1, 1, 1); // initial dummy state
 		// check magic bytes at beginning
 		byte[] magic = new byte[MAGIC.length];
 		dis.read(magic);

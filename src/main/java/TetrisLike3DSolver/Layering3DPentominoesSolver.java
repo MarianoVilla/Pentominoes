@@ -3,8 +3,8 @@ package TetrisLike3DSolver;
 import java.util.ArrayList;
 import java.util.List;
 import GeneralPurposeHelpers.ListUtils;
-import TetrisLike2DSolver.Pentominos2DSolverMT;
-import TetrisLike2DSolver.Pentominos2DSolverMT.Solution;
+import TetrisLike2DSolver.Pentominoes2DSolverMT;
+import TetrisLike2DSolver.Pentominoes2DSolverMT.Solution;
 
 public class Layering3DPentominoesSolver {
 	private boolean foundPerfectSolution = false;
@@ -97,7 +97,6 @@ public class Layering3DPentominoesSolver {
 			}
 		}
 		return possibleGlobalSolutions.get(highestValueSolutionIndex);
-		
 	}
 
 	/**
@@ -113,7 +112,7 @@ public class Layering3DPentominoesSolver {
 	/**
 	 * Given a list of pentominoes, this method will create a list of layers containing them.
 	 * The layers can then be put into LayeredContainers.
-	 * This isn't a general solution: we assume the layers' hegith to be 0.5 and hence there are some hardcoded bits.
+	 * This isn't a general solution: we assume the layers' height to be 0.5 and hence there are some hardcoded bits.
 	 * @param Pentominoes
 	 * @return
 	 */
@@ -123,8 +122,8 @@ public class Layering3DPentominoesSolver {
 		
 		LayeredContainer container = new LayeredContainer(0, containerLength, containerWidth, containerHeight);
 		
-		double containerHeight = container.getHeight();
-		Pentominos2DSolverMT Solver;
+		double remainingContainerHeight = container.getHeight();
+		Pentominoes2DSolverMT Solver;
 		ArrayList<SolutionLayer> Solutions = new ArrayList<SolutionLayer>();
 		Solution Sol = null;
 		ArrayList<Pentomino> pentosForThisLayer = new ArrayList<Pentomino>();
@@ -133,14 +132,14 @@ public class Layering3DPentominoesSolver {
 		//considering that sum(X.volume) < Y.volume. That way, we go backwards, taking a rather optimistic approach:
 		//first, we assume that X fits perfectly in Y. If it doesn't, we can take one pento out and try again.
 		//I can't profile the two solutions right now, but let's add a task: TODO: test and try it out.
-		while(i < Pentominoes.size() && containerHeight >= layersHeight) {
+		while(i < Pentominoes.size() && remainingContainerHeight >= layersHeight) {
 				if(impossibleFit(Pentominoes.get(i), i)) {
 					i++;
 					continue;
 				}
 				alreadyPlacedIndexes.add(i);
 				pentosForThisLayer.add(Pentominoes.get(i));
-				Solver = new Pentominos2DSolverMT((int)(containerWidth/0.5), (int)(containerLength/0.5), pentosForThisLayer);
+				Solver = new Pentominoes2DSolverMT((int)(containerWidth/0.5), (int)(containerLength/0.5), pentosForThisLayer);
 				Sol = Solver.solve();
 				//The current config broke the solution: step back. 
 				//Since we broke the solution, we have at least one extra item. Hence, there's no need to check if we've reached the end.
@@ -154,10 +153,11 @@ public class Layering3DPentominoesSolver {
 						continue;
 					}
 					//Get the last working solution.
-					Solver = new Pentominos2DSolverMT((int)(containerWidth/0.5), (int)(containerLength/0.5), pentosForThisLayer);
+					Solver = new Pentominoes2DSolverMT((int)(containerWidth/0.5), (int)(containerLength/0.5), pentosForThisLayer);
 					Sol = Solver.solve();
 					Solutions.add(new SolutionLayer(layersHeight, Sol));
-					//We found a solution layer: reset the counters. 
+					//We found a solution layer: reset the counters and subtract the height of the layer to the remaining container height.
+					remainingContainerHeight -= layersHeight;
 					i = 0; pentosForThisLayer.clear();
 				}else {
 					i++;
@@ -171,12 +171,17 @@ public class Layering3DPentominoesSolver {
 					}
 					//Otherwise, we still have pentominoes and our container seems to be able to fit more.
 				}
-				containerHeight -= layersHeight;
 		}
 		cleanUp();
 		return Solutions;
 	}
-
+	/**
+	 * Extraction of a double conditional. Checks whether a pento has been put in the impossibleFits collection,
+	 * and if the given index is in the alreadyPlacedIndexes collection.
+	 * @param pento
+	 * @param index
+	 * @return
+	 */
 	private boolean impossibleFit(Pentomino pento, int index) {
 		return alreadyPlacedIndexes.contains(index) || impossibleFits.contains(pento.getClass());
 	}
@@ -185,5 +190,6 @@ public class Layering3DPentominoesSolver {
 	 */
 	private void cleanUp() {
 		alreadyPlacedIndexes.clear();
+		impossibleFits.clear();
 	}
 }
